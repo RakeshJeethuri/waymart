@@ -4,13 +4,10 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
 
   const path = request.nextUrl.pathname;
-  const isPublicPath = path === '/login' || path === '/signup';
-  const isVerify = path === '/verifyUser';
+  const isPublicPath = path === '/login' || path === '/signup'|| path === '/verifyUser';
   const token = request.cookies.get('token')?.value || '';
 
-  // if(isVerify && token) {
-  //   return NextResponse.redirect(new URL('/', request.nextUrl));
-  // }
+
   if (isPublicPath && token) {
     return NextResponse.redirect(new URL('/', request.nextUrl));
   }
@@ -25,6 +22,7 @@ export const config = {
     '/',
     '/login',
     '/signup',
-    '/profile/:path*'
+    '/profile/:path*',
+    '/verifyUser'
   ]
 }

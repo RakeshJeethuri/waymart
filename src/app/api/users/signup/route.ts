@@ -12,12 +12,12 @@ export async function POST(request:NextRequest) {
        console.log(reqBody);
 
        if(!username || !email || !password){
-        return NextResponse.json({error:"Please fill all the fields"},{status:400})
+        return NextResponse.json({message:"Please fill all the fields"},{status:400})
        }
 
        const user=await User.findOne({email});
        if(user){
-        return NextResponse.json({error:"User already exists"},{status:400})
+        return NextResponse.json({message:"User already exists"},{status:400})
        }
 
        const salt=await bcryptjs.genSalt(10);
@@ -39,7 +39,8 @@ export async function POST(request:NextRequest) {
        },{status:201});
        }
     catch (error) {
-        return NextResponse.json({error:"Database Error"},{status:500})
+        console.log(error);
+        return NextResponse.json({message:"Database Error"},{status:500})
         
     }
 
