@@ -8,9 +8,9 @@ export function middleware(request: NextRequest) {
   const isVerify = path === '/verifyUser';
   const token = request.cookies.get('token')?.value || '';
 
-  if(isVerify && token) {
-    return NextResponse.redirect(new URL('/', request.nextUrl));
-  }
+  // if(isVerify && token) {
+  //   return NextResponse.redirect(new URL('/', request.nextUrl));
+  // }
   if (isPublicPath && token) {
     return NextResponse.redirect(new URL('/', request.nextUrl));
   }
@@ -25,7 +25,6 @@ export const config = {
     '/',
     '/login',
     '/signup',
-    '/profile/:path*',
-    '/verifyUser'
+    '/profile/:path*'
   ]
 }
