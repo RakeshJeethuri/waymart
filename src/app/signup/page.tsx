@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import manlogo from "./manlogo.png";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 import "./login.css";
 
 const Signup = () => {
@@ -16,36 +17,37 @@ const Signup = () => {
 
   const router = useRouter();
 
-  const evaluatePasswordStrength = (password) => {
-    let strength = "Weak";
-    if (password.length >= 8) {
-      strength = "Medium";
-    }
-    if (/[A-Z]/.test(password) && /[0-9]/.test(password) && /[!@#$%^&*]/.test(password)) {
-      strength = "Strong";
-    }
-  };
+  // const evaluatePasswordStrength = (password) => {
+  //   let strength = "Weak";
+  //   if (password.length >= 8) {
+  //     strength = "Medium";
+  //   }
+  //   if (/[A-Z]/.test(password) && /[0-9]/.test(password) && /[!@#$%^&*]/.test(password)) {
+  //     strength = "Strong";
+  //   }
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/users/signup", { username, email, password });
+      const response = await axios.post("/api/users/signup", { username, email, password });
+      console.log(response.data);
       localStorage.setItem("userEmail", email);
       setUsername("");
       setEmail("");
       setPassword("");
       setConfirmPassword("");
       const respo = await axios.post("/api/users/sendVerifyOtp", {email});
-
       router.push("/verifyUser");
-    } catch (error) {
-      console.error("Signup failed", error);
+    } catch (error:any) {
+      toast.error(error.response.data.message);
     }
   };
 
   return (
     <>
       <div className="main-container1">
+        <Toaster/>
         <div className="signup-container">
           <div className="signup-image-container">
             <Image src={manlogo} alt="Signup" className="signup-image" />

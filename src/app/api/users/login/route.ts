@@ -12,11 +12,11 @@ export async function POST(request:NextRequest) {
         const {email,password}=reqBody;
         const user = await User.findOne({email})
         if(!user){
-            return NextResponse.json({error:"User does not exist",success:false},{status:400})
+            return NextResponse.json({message:"User does not exist",success:false},{status:400})
         }
         const validPassword = await bcryptjs.compare(password,user.password)
         if(!validPassword){
-            return NextResponse.json({error:"Invalid Password",success:false},{status:400})
+            return NextResponse.json({message:"Invalid Password",success:false},{status:400})
         }
         const tokenData = {
             id:user._id,
@@ -39,7 +39,7 @@ export async function POST(request:NextRequest) {
 
         console.log(reqBody);
     } catch (error:any) {
-        return NextResponse.json({error:error.message},{status:500})
+        return NextResponse.json({error:error.message+"hello catch"},{status:500})
     }
 }
  
