@@ -14,15 +14,14 @@ export async function POST(request:NextRequest) {
         if(!user) {
             return NextResponse.json({error:"User does not exist",success:false},{status:400});
         }
-        if(userotp==="" || userotp !== user.verifyToken) {
+        if(userotp==="" || userotp !== user.forgotPasswordToken) {
             return NextResponse.json({error:"Invalid OTP",success:false},{status:400});
         }
-        if (user.verifyTokenExpiry < Date.now()) {
+        if (user.forgotPasswordTokenExpiry < Date.now()) {
             return NextResponse.json({error:"expired otp",success:false},{status:400});
         }
-        user.isVerified = true;
-        user.verifyToken = null;
-        user.verifyTokenExpiry = null;
+        user.forgotPasswordToken = null;
+        user.forgotPasswordTokenExpiry = null;
         await user.save();
         const mailOptions = {
             from: `"Way Mart" <${process.env.SENDER_EMAIL}>`,
@@ -36,5 +35,4 @@ export async function POST(request:NextRequest) {
     } catch (error:any) {
         return NextResponse.json({error:error.message},{status:500});
         }
-
-}   
+}

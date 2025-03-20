@@ -8,33 +8,26 @@ connect();
 export async function POST(request:NextRequest) {
     try {
         const reqBody = await request.json();
-        const {email,userotp} = reqBody;
+        const {email} = reqBody;
         console.log("send verify otp")
         const user = await User.findOne({email});
         if(!user) {
             return NextResponse.json({error:"User does not exist",success:false},{status:400});
         }
-        if(userotp==="" || userotp !== user.verifyToken) {
-            return NextResponse.json({error:"Invalid OTP",success:false},{status:400});
-        }
-        if (user.verifyTokenExpiry < Date.now()) {
-            return NextResponse.json({error:"expired otp",success:false},{status:400});
-        }
-        user.isVerified = true;
-        user.verifyToken = null;
-        user.verifyTokenExpiry = null;
+        const otp = Math.floor(100000 + Math.random() * 900000);
+        user.forgotPasswordToken = otp;
+        user.forgotPasswordTokenExpiry = new Date(Date.now() + 15 * 60 * 1000);
         await user.save();
         const mailOptions = {
             from: `"Way Mart" <${process.env.SENDER_EMAIL}>`,
             to: user.email,
-            subject: "Account Verification successfull",
-            text: `Enjoy the Waymart experience!`,
-        };
-        await transporter.sendMail(mailOptions);
-        const response = NextResponse.json({message:"Verified successfully",success:true},{status:200});
+            subject: "Reset forget password account OTP",
+            text: `Your OTP is ${otp}. Verify your account using this OTP.`,
+          };
+          await transporter.sendMail(mailOptions);
+        const response = NextResponse.json({message:"OTP sent successfully",success:true},{status:200});
         return response;
     } catch (error:any) {
         return NextResponse.json({error:error.message},{status:500});
         }
-
-}   
+}
