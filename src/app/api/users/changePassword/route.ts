@@ -14,7 +14,7 @@ export async function POST(request:NextRequest) {
         if(!user) {
             return NextResponse.json({error:"User does not exist",success:false},{status:400});
         }
-        const  hashedPassword= await bcrypt.hash(password, 10);
+        const  hashedPassword= await bcryptjs.hash(password, 10);
         user.password = hashedPassword;
         await user.save();
         const mailOptions = {
