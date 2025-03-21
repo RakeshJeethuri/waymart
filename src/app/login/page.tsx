@@ -97,7 +97,7 @@ export default function Login() {
             Login
           </button>
           <Link href={'/signup'}>signup</Link>
-          <a href="/forget-password">Forget Password?</a>
+          <a href="/forgetpassword">Forget Password?</a>
           <p className="terms">
             By logging in, you agree to our{" "}
             <span className="terms-link" onClick={() => setShowTerms(true)}>
