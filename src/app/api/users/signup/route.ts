@@ -8,10 +8,10 @@ connect();
 export async function POST(request:NextRequest) {
     try {
        const reqBody= await request.json();
-       const {username,email,password}=reqBody;
+       const {username,email,password,phone}=reqBody;
        console.log(reqBody);
 
-       if(!username || !email || !password){
+       if(!username || !email || !password || !phone){
         return NextResponse.json({message:"Please fill all the fields"},{status:400})
        }
 
@@ -26,7 +26,8 @@ export async function POST(request:NextRequest) {
        const newUser=new User({
         username,
         email,
-        password:hashedPassword
+        password:hashedPassword,
+        phone
        })
 
        const savedUser=await newUser.save();

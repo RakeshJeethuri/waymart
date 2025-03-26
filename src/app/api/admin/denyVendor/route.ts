@@ -38,7 +38,7 @@ export async function DELETE(request: NextRequest) {
             from: `"Way Mart" <${process.env.SENDER_EMAIL}>`,
             to: vendor.email,
             subject: "Vendor Application Denied",
-            text: `Dear ${vendor.username},\n\nWe regret to inform you that your vendor application has not been accepted due to our internal policies. If you have any questions, feel free to contact us.\n\nBest regards,\nWay Mart Team`,
+            text: `Dear ${vendor.name},\n\nWe regret to inform you that your vendor application has not been accepted due to our internal policies. If you have any questions, feel free to contact us.\n\nBest regards,\nWay Mart Team`,
         };
 
         await transporter.sendMail(mailOptions);

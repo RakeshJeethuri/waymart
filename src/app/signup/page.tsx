@@ -9,9 +9,10 @@ import toast, { Toaster } from "react-hot-toast";
 import "./login.css";
 
 const Signup = () => {
-  const [username, setUsername] = useState("");
+  const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -27,14 +28,15 @@ const Signup = () => {
   //   }
   // };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
     try {
-      await axios.post("/api/users/signup", { username, email, password });
+      await axios.post("/api/users/signup", { username, email, password,phone });
       localStorage.setItem("userEmail", email);
-      setUsername("");
+      setUserName("");
       setEmail("");
       setPassword("");
+      setPhone("");
       setConfirmPassword("");
       const respo = await axios.post("/api/users/sendVerifyOtp", {email});
       router.push("/verifyUser");
@@ -57,9 +59,9 @@ const Signup = () => {
             <form onSubmit={handleSubmit} className="signup-form">
               <input
                 type="text"
-                placeholder="Enter your username"
+                placeholder="Enter your name"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => setUserName(e.target.value)}
                 className="signup-input"
                 required
               />
@@ -68,6 +70,14 @@ const Signup = () => {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className="signup-input"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Enter your mobile"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 className="signup-input"
                 required
               />
@@ -98,8 +108,8 @@ const Signup = () => {
               </div>
               <button
                 type="submit"
-                disabled={!username || !email || !password || !confirmPassword}
-                className={`signup-button ${!username || !email || !password || !confirmPassword ? "disabled-button" : "active-button"}`}
+                disabled={!username || !email || !password || !confirmPassword || !phone}
+                className={`signup-button ${!username || !email || !password || !confirmPassword ||!phone ? "disabled-button" : "active-button"}`}
               >
                 Sign Up
               </button>

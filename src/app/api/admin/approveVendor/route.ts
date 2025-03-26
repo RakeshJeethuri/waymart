@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
             from: `"Way Mart" <${process.env.SENDER_EMAIL}>`,
             to: vendor.email,
             subject: "Vendor Verification Successful",
-            text: `Dear ${vendor.username},\n\nYour account has been successfully verified. Welcome to Way Mart!\n\nBest regards,\nWay Mart Team`,
+            text: `Dear ${vendor.name},\n\nYour account has been successfully verified. Welcome to Way Mart!\n\nBest regards,\nWay Mart Team`,
         };
 
         await transporter.sendMail(mailOptions);
