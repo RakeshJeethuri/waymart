@@ -13,10 +13,10 @@ const Nav = () => {
       </div>
       <div className='links'>
        
-        <Link href="" className="orders">Orders</Link>
-        <Link href="" className='settings'>Settings</Link>
-         <Link href="" className="cart">
-         <FontAwesomeIcon icon={faCartShopping} />
+        <Link href={'/UserHomePage/Orders'} className="orders">Orders</Link>
+        <Link href="/UserHomePage/Settings" className='settings'>Settings</Link>
+         <Link href="/UserHomePage/Cart" className="cart">
+            <FontAwesomeIcon icon={faCartShopping} />
         </Link>
       </div>
     </nav>

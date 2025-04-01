@@ -2,8 +2,8 @@
 "use client";
 
 import React from 'react';
-import Nav from '../../app/UserHomePage/Navbar/page'; // Adjust the path to your Navbar component
-import './Layout.css'; // Optional: Add layout-specific styles
+import Nav from '../Navbar/page'; // Adjust the path to your Navbar component
+import './style.css'; // Optional: Add layout-specific styles
 
 interface LayoutProps {
     children: React.ReactNode;

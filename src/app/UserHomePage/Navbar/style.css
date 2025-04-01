@@ -47,7 +47,9 @@ nav div input[type="text"] {
 .links {
     display: flex;
     align-items: center;
-    gap: 30px; /* Space between links */
+    justify-content: space-evenly;
+    gap: 20px; /* Space between links */
+    margin-right: 20px;
 }
 
 /* Link styles */
@@ -63,15 +65,15 @@ nav a {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
+    width: fit-content;
     height: 40px;
     cursor: pointer;
     
 }
 
-.orders svg, .settings svg, .cart svg {
+.cart svg {
     color: #fff;
-    font-size: 10px;
+    font-size: 18px;
 }
 
 /* Responsive styles */
