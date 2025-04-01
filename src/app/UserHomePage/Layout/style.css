@@ -1,0 +1,9 @@
+/* filepath: c:\Users\test account\Desktop\waymart\src\app\UserHomePage\Layout\Layout.css */
+
+.layout-content {
+    margin-top: 40px; /* Adjust to match the Navbar height */
+    padding: 20px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}

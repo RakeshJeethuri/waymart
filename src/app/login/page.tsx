@@ -47,7 +47,7 @@ export default function Login() {
         setTimeout(()=>{
 
         },2000);
-        router.push("/profile");
+        router.push("/UserHomePage/Home");
         
     } catch (error:any) {
 

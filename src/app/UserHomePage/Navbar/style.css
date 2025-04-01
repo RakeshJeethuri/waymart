@@ -1,0 +1,99 @@
+/* Reset and global styles */
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Navbar styles */
+nav {
+    background-color: #A80038; /* Dark red background */
+    width: 100vw;
+    height: 10%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo styles */
+nav img {
+    width: 150px;
+    height: auto;
+    cursor: pointer;
+}
+
+/* Search bar styles */
+nav div input[type="text"] {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    font-size: 14px;
+    width: 250px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Links container */
+.links {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 20px; /* Space between links */
+    margin-right: 20px;
+}
+
+/* Link styles */
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Orders, Settings, and Cart styles */
+.orders, .settings, .cart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    height: 40px;
+    cursor: pointer;
+    
+}
+
+.cart svg {
+    color: #fff;
+    font-size: 18px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+    }
+
+    nav img {
+        margin-bottom: 10px;
+    }
+
+    nav div input[type="text"] {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .links {
+        gap: 10px;
+    }
+}
