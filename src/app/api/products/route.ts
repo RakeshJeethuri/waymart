@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 connect();
 
 /** 🛍️ ADD PRODUCT (Only Vendor) */
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest) { 
     try {
         const body = await request.json();
         const { vendorId, name, description, price, stock, category, image } = body;
@@ -20,8 +20,6 @@ export async function POST(request: NextRequest) {
         if (!vendor) {
             return NextResponse.json({ error: "Vendor not found" }, { status: 404 });
         }
-
-
         // Create new product
         const product = new Product({ vendor: vendorId, name, description, price, stock, category, image });
         await product.save();
@@ -32,7 +30,7 @@ export async function POST(request: NextRequest) {
             product
         }, { status: 201 });
 
-    } catch (error) {
+    } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
@@ -46,7 +44,7 @@ export async function GET() {
             success: true,
             products
         });
-    } catch (error) {
+    } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
@@ -76,7 +74,7 @@ export async function DELETE(request: NextRequest) {
             success: true
         });
 
-    } catch (error) {
+    } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
