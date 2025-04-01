@@ -53,6 +53,10 @@ const vendorSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    isActive:{
+        type:Boolean,
+        default:false
+    },
     forgotPasswordToken: String,
     forgotPasswordTokenExpiry: Date
 });
