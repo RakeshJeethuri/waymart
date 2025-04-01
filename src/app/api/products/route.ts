@@ -21,6 +21,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Vendor not found" }, { status: 404 });
         }
 
+
         // Create new product
         const product = new Product({ vendor: vendorId, name, description, price, stock, category, image });
         await product.save();

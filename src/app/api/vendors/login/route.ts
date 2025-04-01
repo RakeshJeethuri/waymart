@@ -18,6 +18,9 @@ export async function POST(request:NextRequest) {
         if(!validPassword){
             return NextResponse.json({error:"Invalid Password",success:false},{status:400})
         }
+        if(vendor.isVerified === false) {
+            return NextResponse.json({ error: "Vendor is not verified",status: false }, { status: 401 });
+        }
         const tokenData = {
             id:vendor._id,
             username:vendor.username,

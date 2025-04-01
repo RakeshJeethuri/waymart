@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Calculate order total
-        const orderTotal = cart.products.reduce((total, item) => total + item.product.price * item.quantity, 0);
+        const orderTotal = cart.products.reduce((total: number, item: any) => total + item.product.price * item.quantity, 0);
 
         // Create order
         const order = new Order({
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
             order
         }, { status: 201 });
 
-    } catch (error) {
+    } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
