@@ -25,6 +25,7 @@ const Home = () => {
 	const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 	const [cart, setCart] = useState<CartItem[]>([]);
 	interface User {
+		_id: string; // Add the _id property
 		username: string;
 		// Add other properties of the user object as needed
 	}
@@ -66,7 +67,8 @@ const Home = () => {
 	};
 
 	const handleAddToCart = async (product: Product) => {
-		const userId = user; // Replace with actual user ID logic
+		const userId = user?._id; // Replace with actual user ID logic
+		console.log("User ID:", userId);
 		const productId = product._id;
 		const quantity = 1;
 	
