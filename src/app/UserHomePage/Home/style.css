@@ -1,17 +1,9 @@
 /* General styles */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9; /* Light background */
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
-
 /* Home container */
 .home {
     padding: 20px;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 70px auto auto;
 }
 
 /* Heading styles */
