@@ -2,6 +2,7 @@
 import { useState,useEffect } from "react";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import { CldImage } from 'next-cloudinary';
 import axios from "axios";
 
 var sampleProducts = [];
@@ -12,7 +13,7 @@ export default function InventoryManager() {
   const [search, setSearch] = useState("");
   const [editingProduct, setEditingProduct] = useState(null);
   const [editValues, setEditValues] = useState({ name: "", price: "", weight: "", stock: "" });
-  const [newProduct, setNewProduct] = useState({ name: "", category: "Fruits", price: "", stock: "", weight: "",image:"", description: "" ,vendorId: "" });
+  const [newProduct, setNewProduct] = useState({ name: "", category: "Fruits", price: "", stock: "", weight: "",image:"", description: "" ,vendorId: "",image:null });
   const [vendordetails,setVendordetails] = useState({});
   const filteredProducts = products.filter(
     (p) => (category === "All" || p.category === category) && p.name.toLowerCase().includes(search.toLowerCase())
@@ -77,28 +78,63 @@ export default function InventoryManager() {
     setEditingProduct(null);
   };
 
-  const handleAddProduct =  async () => {
 
-    console.log("handlkes");
-    if (!newProduct.name || !newProduct.category || !newProduct.price || !newProduct.stock ) 
-      {
-        console.log(newProduct);
-        return;
-      }
-
-    newProduct.vendorId = vendordetails._id;
-    try{
-      const res = await axios.post("/api/products",newProduct);
-      console.log(res)
-    }
-    catch{
-      console.log("errror")
-    }
-    setProducts([...products, { ...newProduct, id: products.length + 1 }]);
-    setNewProduct({ name: "", category: "Fruits", price: "", stock: "", weight: "", addedBy: "Vendor A" });
-    
+  const handleFileUpload = (e/*: React.ChangeEvent<HTMLInputElement>*/) => {
+    const file = e.target.files?.[0] || null; // Get the selected file
+    setNewProduct((prev) => ({ ...prev, image: file })); // Update the state with the file
   };
 
+  // const handleAddProduct =  async () => {
+
+  //   console.log("handlkes");
+  //   if (!newProduct.name || !newProduct.category || !newProduct.price || !newProduct.stock ) 
+  //     {
+  //       console.log(newProduct);
+  //       return;
+  //     }
+
+  //   newProduct.vendorId = vendordetails._id;
+  //   try{
+  //     const res = await axios.post("/api/products",newProduct);
+  //     console.log(res)
+  //   }
+  //   catch{
+  //     console.log("errror")
+  //   }
+  //   setProducts([...products, { ...newProduct, id: products.length + 1 }]);
+  //   setNewProduct({ name: "", category: "Fruits", price: "", stock: "", weight: "", addedBy: "Vendor A" });
+    
+  // };
+
+
+  const handleAddProduct = async () => {
+    if (!newProduct.name || !newProduct.category || !newProduct.price || !newProduct.stock || !newProduct.image) {
+      console.log("All fields are required");
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append("vendorId", vendordetails._id);
+    formData.append("name", newProduct.name);
+    formData.append("category", newProduct.category);
+    formData.append("price", newProduct.price);
+    formData.append("stock", newProduct.stock);
+    formData.append("description", newProduct.description);
+    formData.append("image", newProduct.image); // Append the file
+  
+    try {
+      const res = await axios.post("/api/products/add", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Set the correct content type
+        },
+      });
+      console.log(res.data);
+      setProducts([...products, { ...newProduct, id: products.length + 1 }]);
+      // setNewProduct({ name: "", category: "Fruits", price: "", stock: "", weight: "", image: null, description: "" });
+    } catch (error) {
+      console.error("Error while adding product:", error);
+    }
+  };
   return (
  <div className="main-content w-full  p-5 bg-[#FBF9FA] text-[#2B2024]">
       <header className="header flex justify-between items-center mb-5">
@@ -144,13 +180,13 @@ export default function InventoryManager() {
             onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
             className="border p-2 rounded w-full mb-2"
           />
-          <input
+          {/* <input
             type="text"
             placeholder="image"
             value={newProduct.image}
             onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
             className="border p-2 rounded w-full mb-2"
-          />
+          /> */}
           <input
             type="number"
             placeholder="Stock"
@@ -158,13 +194,11 @@ export default function InventoryManager() {
             onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
             className="border p-2 rounded w-full mb-2"
           />
-          {/* <input
-            type="text"
-            placeholder="Weight"
-            value={newProduct.weight}
-            onChange={(e) => setNewProduct({ ...newProduct, weight: e.target.value })}
-            className="border p-2 rounded w-full mb-2"
-          /> */}
+          <input
+  type="file"
+  onChange={handleFileUpload}
+  className="file-input file-input-bordered file-input-primary w-full"
+/>
           <button onClick={handleAddProduct} className="px-3 py-1 bg-[#FD0054] cursor-pointer text-white rounded flex items-center gap-1">
             <FaPlus /> Add Product
           </button>
@@ -234,6 +268,18 @@ export default function InventoryManager() {
                 ) : (
                   <>
                     <h3 className="text-xl font-bold mb-1">{product.name}</h3>
+                    <CldImage
+                        width="960"
+                        height="600"
+                        src={product.image}
+                        sizes="100vw"
+                        alt="transformed image"
+                        crop="fill"
+                        // aspectRatio={socialFormats[selectedFormat].aspectRatio}
+                        gravity='auto'
+                        // ref={imageRef}
+                        onLoad={() => setIsTransforming(false)}
+                        />  
                     <p className="text-sm">Category: {product.category}</p>
                     <p className="text-sm">Price: ${product.price}</p>
                     <p className="text-sm">Weight/Quantity: {product.weight || product.stock}</p>

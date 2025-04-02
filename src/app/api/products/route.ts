@@ -3,6 +3,8 @@ import Product from "@/models/productModel";
 import Vendor from "@/models/vendorModel";
 import { NextRequest, NextResponse } from "next/server";
 
+import { getCldImageUrl } from 'next-cloudinary';
+
 connect();
 
 /** 🛍️ ADD PRODUCT (Only Vendor) */
@@ -20,8 +22,13 @@ export async function POST(request: NextRequest) {
         if (!vendor) {
             return NextResponse.json({ error: "Vendor not found" }, { status: 404 });
         }
+        const url = getCldImageUrl({
+            width: 960,
+            height: 600,
+            src: '"C:/Users/Pavan/Downloads/logo.png"'
+          });
         // Create new product
-        const product = new Product({ vendor: vendorId, name, description, price, stock, category, image });
+        const product = new Product({ vendor: vendorId, name, description, price, stock, category, image:url });
         await product.save();
 
         return NextResponse.json({
