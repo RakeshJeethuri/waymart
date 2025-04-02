@@ -19,8 +19,8 @@ const handleSidebarClose = (e) => {
       
         <div className="dashboard  flex flex-col "> {/* Changed h-full to h-screen */}
           <div className="flex justify-between bg-[linear-gradient(135deg,#A80038,#FD0054)] px-5 py-2">
-            <FaUserCircle className="text-[#2B2024] text-3xl cursor-pointer" />
-            <div className="text-[#2B2024] text-4xl font-bold cursor-pointer" onClick={()=>router.push("/")} >WayMart</div>
+            <FaUserCircle className="text-[#2B2024] text-3xl cursor-pointer"/>
+            <div className="text-[#2B2024] text-4xl font-bold cursor-pointer" onClick={()=>router.push("/vendor-profile")} >WayMart</div>
             <FaBars className="text-[#2B2024] text-2xl cursor-pointer" onClick={() => setIsSidebarOpen(!isSidebarOpen)} />
           </div>
           {isSidebarOpen && (

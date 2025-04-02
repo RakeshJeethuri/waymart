@@ -7,7 +7,7 @@ interface Props {
 
 const TermsAndConditions: React.FC<Props> = ({ onClose }) => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/75 z-50">
       <div className="bg-white p-6 w-full max-w-lg rounded-lg shadow-lg overflow-y-auto max-h-[80vh]">
         <h1 className="text-2xl font-bold mb-4 text-[#FD0054]">Terms and Conditions</h1>
         <p>

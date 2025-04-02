@@ -1,35 +1,61 @@
 "use client"
-import React, { useState } from "react";
+import axios from "axios";
+import { ConciergeBellIcon } from "lucide-react";
+import { set } from "mongoose";
+import React, { useState , useEffect} from "react";
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaBriefcase, FaLock } from "react-icons/fa";
 
 const Profile = () => {
   const [profile, setProfile] = useState({
-    name: "John Doe",
-    email: "johndoe@example.com",
-    phone: "9876543210",
-    address: "123 Street, City",
-    businessName: "Doe Enterprises",
-    businessType: "Retail",
-    panCard: "/adhar.pdf",
-    proofOfBusiness: "/adhar.pdf",
-    state: "California",
-    district: "Los Angeles",
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    businessName: "",
+    businessType: "",
+    panCard: "",
+    proofOfBusiness: "",
+    landmark: "",
+    city: "",
+    district: "",
+    state: "",
+    pincode: "",
   });
 
- 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("/api/vendors/me");
+        const data = res.data.data;
+
+        // Process address
+        let ad = data.address ? data.address.split(",") : [];
+        setProfile({
+          ...data,
+          landmark: ad[0] || "",
+          city: ad[2] || "",
+          district: ad[4] || "",
+          state: ad[5] || "",
+          pincode: ad[6] || "",
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    fetchData();
+  }, []); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProfile({ ...profile, [name]: value });
   };
 
- 
   const handleSubmit = (e) => {
     e.preventDefault();
     alert("Profile updated successfully!");
   };
 
-  
   return (
     <div className="bg-[#FBF9FA] p-6 flex flex-col  min-h-screen">
       <h1 className="text-[#FD0054] text-3xl font-bold mb-6">Profile</h1>
