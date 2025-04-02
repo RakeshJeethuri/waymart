@@ -92,12 +92,20 @@ export default function InventoryManager() {
   };
 
   const handleEdit = (product) => {
-    setEditingProduct(product.id);
+    setEditingProduct(product._id);
     setEditValues({ name: product.name, price: product.price, weight: product.weight, stock: product.stock });
   };
 
-  const handleSave = (id) => {
-    setProducts(products.map((p) => (p.id === id ? { ...p, ...editValues } : p)));
+  const handleSave = async (id) => {
+    try{
+      const res = await axios.put("/api/products",{vendorId:vendordetails._id, productId : id , stock:editValues.stock,price:editValues.price });
+      console.log(res)
+    }
+    catch(e)
+    {
+      console.log(e)
+    }
+    setProducts(products.map((p) => (p._id === id ? { ...p, ...editValues } : p)));
     setEditingProduct(null);
   };
 
@@ -280,7 +288,7 @@ export default function InventoryManager() {
             <div key={product._id} className="product-card bg-white p-4 rounded shadow flex flex-col justify-between">
               <div>
                 
-                {editingProduct === product.id ? (
+                {editingProduct === product._id ? (
                   <>
                     <input
                       type="text"
@@ -321,7 +329,7 @@ export default function InventoryManager() {
                         // aspectRatio={socialFormats[selectedFormat].aspectRatio}
                         gravity='auto'
                         // ref={imageRef}
-                        onLoad={() => setIsTransforming(false)}
+                        // onLoad={() => setIsTransforming(false)}
                         />  
                     <p className="text-sm">Category: {product.category}</p>
                     <p className="text-sm">Price: ${product.price}</p>
@@ -334,8 +342,8 @@ export default function InventoryManager() {
                 )}
               </div>
               <div className="flex justify-between mt-3">
-                {editingProduct === product.id ? (
-                  <button onClick={() => handleSave(product.id)} className="px-3 py-1 bg-green-500 text-white rounded">
+                {editingProduct === product._id ? (
+                  <button onClick={() => handleSave(product._id)} className="px-3 py-1 bg-green-500 text-white rounded">
                     Save
                   </button>
                 ) : (

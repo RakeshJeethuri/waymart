@@ -85,3 +85,38 @@ export async function DELETE(request: NextRequest) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
+export async function PUT(request: NextRequest) {
+    try {
+        const body = await request.json();
+        const { vendorId, productId, stock,price } = body;
+
+        if (!vendorId || !productId || stock === undefined) {
+            return NextResponse.json({ error: "vendorId, productId, and stock are required" }, { status: 400 });
+        }
+
+        // Check if vendor exists
+        const vendor = await Vendor.findById(vendorId);
+        if (!vendor) {
+            return NextResponse.json({ error: "Vendor not found" }, { status: 404 });
+        }
+
+        // Find product and update stock
+        const product = await Product.findOne({ _id: productId, vendor: vendorId });
+        if (!product) {
+            return NextResponse.json({ error: "Product not found for this vendor" }, { status: 404 });
+        }
+
+        product.stock = stock;
+        product.price = price;
+        await product.save();
+
+        return NextResponse.json({
+            message: "Stock updated successfully",
+            success: true,
+            product
+        }, { status: 200 });
+
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+}
