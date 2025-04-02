@@ -181,6 +181,7 @@
 // };
 
 // export default Home;
+
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -337,8 +338,8 @@ const Home = () => {
 
 	return (
 		<Layout>
-			<div className="home">
-				<h2>Hello, {user?.username}</h2>
+			<div className="main-content home">
+			{user ? <h2>Hello, {user.username}!</h2> : <h2>Welcome to WayMart!</h2>}
 
 				<div className="category">
 					<button onClick={handleAll}>All</button>

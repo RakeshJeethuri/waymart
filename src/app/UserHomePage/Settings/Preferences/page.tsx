@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Layout from "../../Layout/page";
 
 const AppPreferences = () => {
   const [preferences, setPreferences] = useState({
@@ -58,6 +59,7 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
   }, [preferences.theme]);
 
   return (
+    <Layout>
     <div className="main-content p-5 bg-gray-100 min-h-screen mt-9">
       <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
         <h1 className="text-2xl font-bold mb-6 text-center lg:text-3xl">App Preferences</h1>
@@ -180,7 +182,7 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
               Save Changes
             </button>
 
-            <Link href="/admin/Settings">
+            <Link href="/UserHomePage/Settings">
               <button
                 type="button"
                 className="bg-[#Fd0054] text-white px-4 py-2 rounded-md hover:bg-[#A80038] sm:w-auto"
@@ -192,6 +194,7 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         </form>
       </div>
     </div>
+    </Layout>
   );
 };
 

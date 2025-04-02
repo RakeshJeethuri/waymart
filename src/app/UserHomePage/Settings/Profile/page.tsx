@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import Layout from '../../Layout/page';
 
 const ProfileSettings = () => {
   const [profile, setProfile] = useState({
@@ -48,9 +49,10 @@ const handleChange = (e: ChangeEvent) => {
 };
 
   return (
-    <div className="main-content p-5 bg-gray-100 min-h-screen mt-9">
-      <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-2xl font-bold mb-6 text-center lg:text-3xl">Profile Settings</h1>
+    <Layout>
+    <div className="main-content px-8 py-4 bg-gray-100 flex justify-center items-center">
+      <div className="w-auto mx-auto bg-white p-10 rounded-lg shadow-lg ">
+        <h1 className="text-2xl font-bold mb-6 text-center lg:text-3xl mb-5">Profile Settings</h1>
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Name */}
@@ -113,7 +115,7 @@ const handleChange = (e: ChangeEvent) => {
               Save Changes
             </button>
 
-            <Link href="/admin/Settings">
+            <Link href="/UserHomePage/Settings">
               <button
                 type="button"
                 className="bg-[#FD0054] text-white px-4 py-2 rounded-md hover:bg-[#A80038] w-full sm:w-auto"
@@ -125,6 +127,7 @@ const handleChange = (e: ChangeEvent) => {
         </form>
       </div>
     </div>
+    </Layout>
   );
 };
 
