@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import Layout from '../../Layout/page';
 
 const ProfileSettings = () => {
   const [profile, setProfile] = useState({
@@ -12,27 +13,46 @@ const ProfileSettings = () => {
     confirmPassword: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProfile({ ...profile, [name]: value });
-  };
+  // Removed duplicate handleChange declaration
 
-  const handleSubmit = (e) => {
+interface Profile {
+    name: string;
+    email: string;
+    phone: string;
+    role: string;
+    password: string;
+    confirmPassword: string;
+}
+
+interface ChangeEvent {
+    target: {
+        name: string;
+        value: string;
+    };
+}
+
+const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (profile.password !== profile.confirmPassword) {
-      alert("Passwords do not match.");
-      return;
+        alert("Passwords do not match.");
+        return;
     }
 
     alert("Profile updated successfully!");
     console.log("Updated Profile:", profile);
-  };
+};
+
+const handleChange = (e: ChangeEvent) => {
+    const { name, value } = e.target;
+    setProfile({ ...profile, [name]: value });
+};
 
   return (
-    <div className="p-5 bg-gray-100 min-h-screen mt-9">
-      <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-2xl font-bold mb-6 text-center lg:text-3xl">Profile Settings</h1>
+    <Layout>
+    <div className="main-content px-8 py-4 bg-gray-100 flex justify-center items-center">
+      <div className="w-auto mx-auto bg-white p-10 rounded-lg shadow-lg ">
+        <h1 className="text-2xl font-bold mb-6 text-center lg:text-3xl mb-5">Profile Settings</h1>
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Name */}
@@ -95,7 +115,7 @@ const ProfileSettings = () => {
               Save Changes
             </button>
 
-            <Link href="/admin/Settings">
+            <Link href="/UserHomePage/Settings">
               <button
                 type="button"
                 className="bg-[#FD0054] text-white px-4 py-2 rounded-md hover:bg-[#A80038] w-full sm:w-auto"
@@ -107,6 +127,7 @@ const ProfileSettings = () => {
         </form>
       </div>
     </div>
+    </Layout>
   );
 };
 

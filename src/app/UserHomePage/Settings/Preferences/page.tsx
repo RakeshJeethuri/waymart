@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Layout from "../../Layout/page";
 
 const AppPreferences = () => {
   const [preferences, setPreferences] = useState({
@@ -15,28 +16,42 @@ const AppPreferences = () => {
     },
   });
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+interface Preferences {
+    theme: string;
+    language: string;
+    dateFormat: string;
+    timeFormat: string;
+    timezone: string;
+    accessibility: {
+        highContrast: boolean;
+        largeText: boolean;
+    };
+}
+
+interface ChangeEvent extends React.ChangeEvent<HTMLInputElement | HTMLSelectElement> {}
+
+const handleChange = (e: ChangeEvent) => {
+    const { name, value, type, checked } = e.target as HTMLInputElement;
 
     if (name.includes("accessibility")) {
-      const key = name.split(".")[1];
-      setPreferences((prev) => ({
-        ...prev,
-        accessibility: {
-          ...prev.accessibility,
-          [key]: checked,
-        },
-      }));
+        const key = name.split(".")[1] as keyof Preferences["accessibility"];
+        setPreferences((prev) => ({
+            ...prev,
+            accessibility: {
+                ...prev.accessibility,
+                [key]: checked,
+            },
+        }));
     } else {
-      setPreferences({ ...preferences, [name]: value });
+        setPreferences({ ...preferences, [name]: value });
     }
-  };
+};
 
-  const handleSubmit = (e) => {
+const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     alert("App preferences updated successfully!");
     console.log("Updated Preferences:", preferences);
-  };
+};
 
   useEffect(() => {
     // Apply theme dynamically
@@ -44,7 +59,8 @@ const AppPreferences = () => {
   }, [preferences.theme]);
 
   return (
-    <div className="p-5 bg-gray-100 min-h-screen mt-9">
+    <Layout>
+    <div className="main-content p-5 bg-gray-100 min-h-screen mt-9">
       <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
         <h1 className="text-2xl font-bold mb-6 text-center lg:text-3xl">App Preferences</h1>
 
@@ -166,7 +182,7 @@ const AppPreferences = () => {
               Save Changes
             </button>
 
-            <Link href="/admin/Settings">
+            <Link href="/UserHomePage/Settings">
               <button
                 type="button"
                 className="bg-[#Fd0054] text-white px-4 py-2 rounded-md hover:bg-[#A80038] sm:w-auto"
@@ -178,6 +194,7 @@ const AppPreferences = () => {
         </form>
       </div>
     </div>
+    </Layout>
   );
 };
 

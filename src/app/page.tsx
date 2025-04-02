@@ -41,7 +41,7 @@ export default function Home() {
     <>
       <div className="bg-[#FBF9FA] text-[#2B2024] font-sans" id="home">
         <header className="bg-white shadow-md fixed top-0 w-full z-10000">
-          <nav className="container mx-auto flex justify-between items-center p-4">
+          <nav className="container mx-auto flex bg-white justify-between items-center p-4">
             <div className="text-2xl font-bold text-[#A80038]">
               <img src='/images/logo-bg-removed.png' width={150} height={50} alt="WayMart Logo" />
             </div>
