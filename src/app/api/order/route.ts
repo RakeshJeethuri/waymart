@@ -11,9 +11,9 @@ connect();
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { userId } = body;
+        const { userId ,orderTotal } = body;
 
-        if (!userId) {
+        if (!userId || !orderTotal) {
             return NextResponse.json({ error: "User ID is required" }, { status: 400 });
         }
 
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Calculate order total
-        const orderTotal = cart.products.reduce((total: number, item: any) => total + item.product.price * item.quantity, 0);
+        // const orderTotal = cart.products.reduce((total: number, item: any) => total + item.product.price * item.quantity, 0);
 
         // Create order
         const order = new Order({
@@ -112,33 +112,33 @@ export async function PUT(request: NextRequest) {
 }
 
 /** 🚀 GET ORDER BY ID */
-export async function GET(request: NextRequest) {
-    try {
-        const { searchParams } = new URL(request.url);
-        const orderId = searchParams.get("orderId");
+// export async function GET(request: NextRequest) {
+//     try {
+//         const { searchParams } = new URL(request.url);
+//         const orderId = searchParams.get("orderId");
 
-        if (!orderId) {
-            return NextResponse.json({ error: "Order ID is required" }, { status: 400 });
-        }
+//         if (!orderId) {
+//             return NextResponse.json({ error: "Order ID is required" }, { status: 400 });
+//         }
 
-        const order = await Order.findById(orderId)
-            .populate("user", "username email")
-            .populate("products.product", "name price");
+//         const order = await Order.findById(orderId)
+//             .populate("user", "username email")
+//             .populate("products.product", "name price");
 
-        if (!order) {
-            return NextResponse.json({ error: "Order not found" }, { status: 404 });
-        }
+//         if (!order) {
+//             return NextResponse.json({ error: "Order not found" }, { status: 404 });
+//         }
 
-        return NextResponse.json({
-            message: "Order retrieved successfully",
-            success: true,
-            order
-        });
+//         return NextResponse.json({
+//             message: "Order retrieved successfully",
+//             success: true,
+//             order
+//         });
 
-    } catch (error:any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-}
+//     } catch (error:any) {
+//         return NextResponse.json({ error: error.message }, { status: 500 });
+//     }
+// }
 
 /** 🚀 CANCEL ORDER */
 export async function DELETE(request: NextRequest) {
