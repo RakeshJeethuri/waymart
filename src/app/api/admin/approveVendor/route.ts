@@ -28,13 +28,14 @@ export async function POST(request: NextRequest) {
         }
 
         vendor.isVerified = true;
+        vendor.isActive = true;
         await vendor.save();
 
         const mailOptions = {
             from: `"Way Mart" <${process.env.SENDER_EMAIL}>`,
             to: vendor.email,
             subject: "Vendor Verification Successful",
-            text: `Dear ${vendor.name},\n\nYour account has been successfully verified. Welcome to Way Mart!\n\nBest regards,\nWay Mart Team`,
+            text: `Dear ${vendor.name},\n\nYour account has been successfully verified and activated. Welcome to Way Mart!\n\nBest regards,\nWay Mart Team`,
         };
 
         await transporter.sendMail(mailOptions);

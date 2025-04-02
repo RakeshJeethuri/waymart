@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
             cart
         });
 
-    } catch (error) {
+    } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

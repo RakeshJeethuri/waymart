@@ -106,7 +106,7 @@ export async function PUT(request: NextRequest) {
             order
         });
 
-    } catch (error) {
+    } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
@@ -135,7 +135,7 @@ export async function GET(request: NextRequest) {
             order
         });
 
-    } catch (error) {
+    } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
@@ -167,7 +167,7 @@ export async function DELETE(request: NextRequest) {
             success: true
         });
 
-    } catch (error) {
+    } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
