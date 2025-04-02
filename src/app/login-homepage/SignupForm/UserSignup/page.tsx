@@ -38,7 +38,7 @@ const Signup: React.FC<UserSignupProps> = ({ setOtpPage }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res =await axios.post("/api/users/signup", { username:formData.name, email:formData.email, password:formData.password });
+      const res =await axios.post("/api/users/signup", { username:formData.name, email:formData.email, password:formData.password, phone :formData.phone});
       localStorage.setItem("userEmail", formData.email);
       setFormData({
         name: "",
@@ -50,7 +50,7 @@ const Signup: React.FC<UserSignupProps> = ({ setOtpPage }) => {
       const respo = await axios.post("/api/users/sendVerifyOtp", {email:formData.email});
     console.log("OTP sent to email:", formData.email);
       setOtpPage(true);
-
+      // const res1 = await axios.post("/api/users/validateOtp",{email:formData.email, userOtp: })
       // router.push("login-homepage/SignupForm/UserSignup/verifyUser");
     } catch (error:any) {
       console.error(error);
