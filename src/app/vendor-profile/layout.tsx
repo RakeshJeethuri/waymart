@@ -4,14 +4,15 @@ export default function RootLayout({ children,}: Readonly<{
 }>) {
   
     return (
-      <html lang="en">
-        <body
-          className={`antialiased h-screen` }
+     
+        <div
+         className={`antialiased h-screen` }
         >
           <Navbar/>
           {children }
-        </body>
-      </html>
+        </div>
+         
+       
     );
   }
   

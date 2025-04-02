@@ -47,9 +47,9 @@ const Login = () => {
         console.log("Login success",response.data);
        
         toast.success("Login success");
-        setTimeout(()=>{
+        // setTimeout(()=>{
 
-        },2000);
+        // },2000);
         router.push("/UserHomePage/Home");
         
     } catch (error:any) {

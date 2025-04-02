@@ -173,7 +173,7 @@ const LoginBusiness = () => {
       </div>
 
       {/* Terms & Conditions Modal */}
-      {showTerms && <TermsAndConditions onClose={() => setShowTerms(false)} />}
+      {showTerms && <TermsAndConditions onClose={() => setShowTerms(false)}  />}
       <ToastContainer position="top-center" autoClose={3000} />
     </div>
   );

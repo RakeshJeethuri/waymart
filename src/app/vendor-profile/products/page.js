@@ -33,9 +33,12 @@ export default function InventoryManager() {
     fetchData();
   }, []);
 
- useEffect(()=>{
-  getdata();
- },[vendordetails]);
+  useEffect(() => {
+    if (vendordetails._id) {
+      getdata();
+    }
+  }, [vendordetails._id]);
+
 
 
   const getdata = async ()=>{
@@ -44,7 +47,8 @@ export default function InventoryManager() {
       console.log(vendordetails._id)
       const res = await axios.post("/api/vendorsproduct",{vendorId: vendordetails._id});
       console.log(res.data.products);
-      setProducts(res.data.products)
+      setProducts(res.data.products);
+      
     }
     catch(e){
       console.log(e);
@@ -64,7 +68,25 @@ export default function InventoryManager() {
 
   const COLORS = ["#4CAF50", "#FF5733"];
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
+    console.log(id);
+    try{
+      const res = await axios.delete("/api/products", {
+        params: {
+          productId: id,
+          vendorId: vendordetails._id
+        }
+       
+
+      });
+      console.log(res);
+      
+
+    }catch(e)
+    {
+      console.log(e);
+    }
+    console.log(products);
     setProducts(products.filter((product) => product.id !== id));
   };
 
@@ -134,6 +156,24 @@ export default function InventoryManager() {
     } catch (error) {
       console.error("Error while adding product:", error);
     }
+    console.log("handlkes");
+    if (!newProduct.name || !newProduct.category || !newProduct.price  ) 
+      {
+        console.log(newProduct);
+        return;
+      }
+
+    newProduct.vendorId = vendordetails._id;
+    try{
+      const res = await axios.post("/api/products",newProduct);
+      console.log(res)
+    }
+    catch{
+      console.log("errror")
+    }
+    setProducts([...products, { ...newProduct, id: products.length + 1 }]);
+    setNewProduct({ name: "", category: "Fruits", price: "", stock: "", weight: "",description:"",image:"",addedBy: "Vendor A" });
+    
   };
   return (
  <div className="main-content w-full  p-5 bg-[#FBF9FA] text-[#2B2024]">
@@ -236,8 +276,9 @@ export default function InventoryManager() {
           <p className="text-gray-500">No products found.</p>
         ) : (
           filteredProducts.map((product) => (
-            <div key={product.id} className="product-card bg-white p-4 rounded shadow flex flex-col justify-between">
+            <div key={product._id} className="product-card bg-white p-4 rounded shadow flex flex-col justify-between">
               <div>
+                
                 {editingProduct === product.id ? (
                   <>
                     <input
@@ -267,6 +308,7 @@ export default function InventoryManager() {
                   </>
                 ) : (
                   <>
+                    {/* <p>{product._id}</p> */}
                     <h3 className="text-xl font-bold mb-1">{product.name}</h3>
                     <CldImage
                         width="960"
@@ -286,7 +328,7 @@ export default function InventoryManager() {
                     <p className={`text-sm font-bold ${product.stock > 0 ? "text-green-600" : "text-red-600"}`}>
                       {product.stock > 0 ? "In Stock" : "Out of Stock"}
                     </p>
-                    <p className="text-xs text-gray-500">Added by: {product.addedBy}</p>
+                    {/* <p className="text-xs text-gray-500">Added by: {product.addedBy}</p> */}
                   </>
                 )}
               </div>
@@ -300,7 +342,7 @@ export default function InventoryManager() {
                     <FaEdit />
                   </button>
                 )}
-                <button onClick={() => handleDelete(product.id)} className="px-3 py-1 bg-red-500 text-white rounded flex items-center gap-1">
+                <button onClick={() => handleDelete(product._id)} className="px-3 py-1 bg-red-500 text-white rounded flex items-center gap-1">
                   <FaTrash />
                 </button>
               </div>
