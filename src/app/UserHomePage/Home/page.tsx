@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import Layout from "../Layout/page";
 import "./style.css";
 import axios from "axios";
-import { set } from "mongoose";
 
 const Home = () => {
 	interface Product {
@@ -21,115 +20,136 @@ const Home = () => {
 		quantity: number;
 	}
 
+	interface User {
+		_id: string;
+		username: string;
+	}
+
 	const [products, setProducts] = useState<Product[]>([]);
 	const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 	const [cart, setCart] = useState<CartItem[]>([]);
-	interface User {
-		_id: string; // Add the _id property
-		username: string;
-		// Add other properties of the user object as needed
-	}
-
 	const [user, setUser] = useState<User | null>(null);
-	const [quantity, setQuantity] = useState(0);
 
+	// Fetch Products & User Data
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await axios.get("/api/products");
-				console.log("Products API Response:", response.data);
-	
-				try {
-					const users = await axios.get("/api/users/me");
-					console.log(users.data.data);
-					setUser(users.data.data);
-				} catch (userError) {
-					console.error("Error fetching user data:", userError);
+				const [productsRes, userRes] = await Promise.all([
+					axios.get("/api/products"),
+					axios.get("/api/users/me"),
+				]);
 
-				}
-	
-				setProducts(response.data.products);
-				setFilteredProducts(response.data.products);
+				setProducts(productsRes.data.products);
+				setFilteredProducts(productsRes.data.products);
+				setUser(userRes.data.data);
 			} catch (error) {
 				console.error("Error fetching data:", error);
 			}
 		};
 		fetchData();
 	}, []);
+
 	const handleAll = () => setFilteredProducts(products);
 
 	const handleCategoryFilter = (category: string) => {
-		setFilteredProducts(
-			products.filter((product) =>
-				product.category.toLowerCase().includes(category.toLowerCase())
-			)
-		);
+		setFilteredProducts(products.filter(
+			(product) => product.category.toLowerCase() === category.toLowerCase()
+		));
 	};
 
+	// Add to Cart & Update API
 	const handleAddToCart = async (product: Product) => {
-		const userId = user?._id; // Replace with actual user ID logic
-		console.log("User ID:", userId);
-		const productId = product._id;
-		const quantity = 1;
-	
-		setCart((prevCart) => {
-			const existingItem = prevCart.find((item) => item._id === productId);
-			if (existingItem) {
-				if (existingItem.quantity < product.stock) {
-					return prevCart.map((item) =>
-						item._id === productId
-							? { ...item, quantity: item.quantity + 1 }
-							: item
-					);
-				} else {
-					alert(`Only ${product.stock} available in stock.`);
-					return prevCart;
-				}
-			} else {
-				if (product.stock > 0) {
-					return [...prevCart, { ...product, quantity: 1 }];
-				} else {
-					alert(`This product is out of stock.`);
-					return prevCart;
-				}
-			}
-		});
-	
-		// Post the cart item to the API
+		if (!user) {
+			alert("Please log in to add items to the cart.");
+			return;
+		}
+
+		const existingItem = cart.find((item) => item._id === product._id);
+		const newQuantity = existingItem ? existingItem.quantity + 1 : 1;
+
+		if (newQuantity > product.stock) {
+			alert(`Only ${product.stock} available in stock.`);
+			return;
+		}
+
+		const updatedCart = existingItem
+			? cart.map((item) =>
+					item._id === product._id ? { ...item, quantity: newQuantity } : item
+			  )
+			: [...cart, { ...product, quantity: 1 }];
+
+		setCart(updatedCart);
+
 		try {
 			await axios.post("/api/cart", {
-				userId,
-				productId,
-				quantity,
+				userId: user._id,
+				productId: product._id,
+				quantity: newQuantity,
 			});
-			console.log("Cart item added successfully");
+			console.log("Cart updated successfully");
 		} catch (error) {
-			console.error("Error adding item to cart:", error);
+			console.error("Error updating cart:", error);
 		}
 	};
 
-	const handleIncrement = (productId: string) => {
-		setCart((prevCart) =>
-			prevCart.map((item) =>
-				item._id === productId
-					? item.quantity + 1 <= item.stock
-						? { ...item, quantity: item.quantity + 1 }
-						: (alert(`Only ${item.stock} available in stock.`), item)
-					: item
-			)
+	// Handle Increment Quantity
+	const handleIncrement = async (productId: string) => {
+		const updatedCart = cart.map((item) =>
+			item._id === productId
+				? item.quantity + 1 <= item.stock
+					? { ...item, quantity: item.quantity + 1 }
+					: (alert(`Only ${item.stock} available in stock.`), item)
+				: item
 		);
+		setCart(updatedCart);
+
+		const updatedItem = updatedCart.find((item) => item._id === productId);
+		if (updatedItem && updatedItem.quantity <= updatedItem.stock) {
+			try {
+				await axios.put("/api/cart", {
+					userId: user?._id,
+					productId,
+					quantity: updatedItem.quantity,
+				});
+				console.log("Cart item quantity increased");
+			} catch (error) {
+				console.error("Error updating cart:", error);
+			}
+		}
 	};
 
-	const handleDecrement = (productId: string) => {
-		setCart((prevCart) =>
-			prevCart
-				.map((item) =>
-					item._id === productId
-						? { ...item, quantity: Math.max(item.quantity - 1, 0) }
-						: item
-				)
-				.filter((item) => item.quantity > 0)
-		);
+	// Handle Decrement Quantity
+	const handleDecrement = async (productId: string) => {
+		const updatedCart = cart
+			.map((item) =>
+				item._id === productId ? { ...item, quantity: item.quantity - 1 } : item
+			)
+			.filter((item) => item.quantity > 0);
+
+		setCart(updatedCart);
+
+		const updatedItem = updatedCart.find((item) => item._id === productId);
+		if (updatedItem) {
+			try {
+				await axios.put("/api/cart", {
+					userId: user?._id,
+					productId,
+					quantity: updatedItem.quantity,
+				});
+				console.log("Cart item quantity decreased");
+			} catch (error) {
+				console.error("Error updating cart:", error);
+			}
+		} else {
+			try {
+				await axios.delete("/api/cart", {
+					data: { userId: user?._id, productId },
+				});
+				console.log("Cart item removed");
+			} catch (error) {
+				console.error("Error removing item from cart:", error);
+			}
+		}
 	};
 
 	return (
@@ -150,31 +170,30 @@ const Home = () => {
 
 				{/* Products Section */}
 				<div className="products">
-    {filteredProducts.map((product) => {
-        const cartItem = cart.find((item) => item._id === product._id);
-        return (
-            <div key={product._id} className="product-card">
-                <img
-                    src={product.image.startsWith("http") ? product.image : "/fallback-image.jpg"}
-                    alt={product.name}
-                />
-                <h2>{product.name}</h2>
-                <p>{product.description}</p>
-                <p>Price: ${product.price}</p>
-                {/* <p>Stock: {product.stock}</p> */}
-                {cartItem ? (
-                    <div className="quantity-controls">
-                        <button onClick={() => handleDecrement(product._id)}>-</button>
-                        <span>{cartItem.quantity}</span>
-                        <button onClick={() => handleIncrement(product._id)}>+</button>
-                    </div>
-                ) : (
-                    <button onClick={() => handleAddToCart(product)}>Add to Cart</button>
-                )}
-            </div>
-        );
-    })}
-</div>
+					{filteredProducts.map((product) => {
+						const cartItem = cart.find((item) => item._id === product._id);
+						return (
+							<div key={product._id} className="product-card">
+								<img
+									src={product.image.startsWith("http") ? product.image : "/fallback-image.jpg"}
+									alt={product.name}
+								/>
+								<h2>{product.name}</h2>
+								<p>{product.description}</p>
+								<p>Price: ${product.price}</p>
+								{cartItem ? (
+									<div className="quantity-controls">
+										<button onClick={() => handleDecrement(product._id)}>-</button>
+										<span>{cartItem.quantity}</span>
+										<button onClick={() => handleIncrement(product._id)}>+</button>
+									</div>
+								) : (
+									<button onClick={() => handleAddToCart(product)}>Add to Cart</button>
+								)}
+							</div>
+						);
+					})}
+				</div>
 			</div>
 		</Layout>
 	);
