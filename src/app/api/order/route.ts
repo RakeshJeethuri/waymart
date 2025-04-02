@@ -11,10 +11,10 @@ connect();
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { userId ,orderTotal } = body;
+        const { userId ,orderTotal ,address} = body;
 
-        if (!userId || !orderTotal) {
-            return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+        if (!userId || !orderTotal || !address) {
+            return NextResponse.json({ error: "request body failed" }, { status: 400 });
         }
 
         // Get user's cart
@@ -31,7 +31,8 @@ export async function POST(request: NextRequest) {
         const order = new Order({
             user: userId,
             products: cart.products,
-            orderTotal
+            orderTotal,
+            address
         });
 
         await order.save();
@@ -72,7 +73,7 @@ export async function GET(request: NextRequest) {
             orders
         });
 
-    } catch (error) {
+    } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
