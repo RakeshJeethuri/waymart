@@ -187,6 +187,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../Layout/page";
 import "./style.css";
+import { CldImage } from 'next-cloudinary';
 import axios from "axios";
 
 const Home = () => {
@@ -354,10 +355,18 @@ const Home = () => {
 						const cartItem = cart.find((item) => item._id === product._id);
 						return (
 							<div key={product._id} className="product-card">
-								<img
-									src={product.image.startsWith("http") ? product.image : "/fallback-image.jpg"}
-									alt={product.name}
-								/>
+								<CldImage
+														width="960"
+														height="600"
+														src={product.image}
+														sizes="100vw"
+														alt="transformed image"
+														crop="fill"
+														// aspectRatio={socialFormats[selectedFormat].aspectRatio}
+														gravity='auto'
+														// ref={imageRef}
+														// onLoad={() => setIsTransforming(false)}
+														/>  
 								<h2>{product.name}</h2>
 								<p>{product.description}</p>
 								<p>Price: ${product.price}</p>
