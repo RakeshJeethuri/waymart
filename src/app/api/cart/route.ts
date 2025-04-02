@@ -3,6 +3,7 @@ import Cart from "@/models/cartModel";
 import Product from "@/models/productModel";
 import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
+import { AnyARecord } from "node:dns";
 
 connect();
 
@@ -54,7 +55,7 @@ export async function POST(request: NextRequest) {
             cart
         }, { status: 201 });
 
-    } catch (error) {
+    } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
