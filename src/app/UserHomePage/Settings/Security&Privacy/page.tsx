@@ -10,28 +10,44 @@ const SecuritySettings = () => {
     twoFactorAuth: false,
   });
 
-  const handleChange = (e) => {
+interface FormState {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+    twoFactorAuth: boolean;
+}
+
+interface ChangeEvent {
+    target: {
+        name: string;
+        value: string;
+        type: string;
+        checked: boolean;
+    };
+}
+
+const handleChange = (e: ChangeEvent) => {
     const { name, value, type, checked } = e.target;
     setForm({
-      ...form,
-      [name]: type === "checkbox" ? checked : value,
+        ...form,
+        [name]: type === "checkbox" ? checked : value,
     });
-  };
+};
 
-  const handleSubmit = (e) => {
+const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (form.newPassword !== form.confirmPassword) {
-      alert("New password and confirmation do not match.");
-      return;
+        alert("New password and confirmation do not match.");
+        return;
     }
 
     alert("Security settings updated successfully!");
     console.log("Updated Security Settings:", form);
-  };
+};
 
   return (
-    <div className="p-5 bg-gray-100 min-h-screen mt-9">
+    <div className="main-content p-5 bg-gray-100 min-h-screen mt-9">
       <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
         <h1 className="text-2xl font-bold mb-6 text-center lg:text-3xl">Security & Privacy</h1>
 

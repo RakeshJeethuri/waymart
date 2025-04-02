@@ -291,7 +291,7 @@ const CartPage = () => {
 
 	return (
     <Layout>
-        <div className="cart-container">
+        <div className="main-content cart-container">
             <h1 className="cart-header">Your Cart</h1>
             {cart.length === 0 ? (
                 <p className="empty-cart-message">Your cart is empty.</p>

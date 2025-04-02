@@ -7,7 +7,7 @@ import './style.css';
 const Nav = () => {
   return (
     <nav>
-      <img src="/assets/logo.png" alt="Logo" />
+      <img src="/images/whitelogo.png" alt="Logo" />
       <div>
         <input type="text" placeholder="Search products..." />
       </div>

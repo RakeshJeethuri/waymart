@@ -16,22 +16,38 @@ const PaymentSettings = () => {
     enableWallet: false,
   });
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setPayment({
-      ...payment,
-      [name]: type === "checkbox" ? checked : value,
-    });
-  };
+interface PaymentSettingsState {
+    cardNumber: string;
+    expiryDate: string;
+    cvv: string;
+    paymentMethod: string;
+    billingAddress: string;
+    autoBilling: boolean;
+    upiId: string;
+    enableUpi: boolean;
+    wallet: string;
+    enableWallet: boolean;
+}
 
-  const handleSubmit = (e) => {
+interface HandleChangeEvent extends React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> {}
+
+const handleChange = (e: HandleChangeEvent): void => {
+    const { name, value, type } = e.target;
+    const checked = type === "checkbox" && e.target instanceof HTMLInputElement ? e.target.checked : undefined;
+    setPayment((prevState: PaymentSettingsState) => ({
+        ...prevState,
+        [name]: type === "checkbox" ? checked : value,
+    }));
+};
+
+const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     alert("Payment settings updated successfully!");
     console.log("Updated Payment Settings:", payment);
-  };
+};
 
   return (
-    <div className="p-5 bg-gray-100 min-h-screen mt-9">
+    <div className="main-content p-5 bg-gray-100 min-h-screen mt-9">
       <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
         <h1 className="text-2xl font-bold mb-6 text-center lg:text-3xl">Payment Settings</h1>
 
@@ -106,7 +122,7 @@ const PaymentSettings = () => {
               onChange={handleChange}
               className="mt-1 p-2 w-full border rounded-md"
               placeholder="Enter billing address"
-              rows="3"
+              rows={3}
               required
             />
           </div>

@@ -12,25 +12,43 @@ const ProfileSettings = () => {
     confirmPassword: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProfile({ ...profile, [name]: value });
-  };
+  // Removed duplicate handleChange declaration
 
-  const handleSubmit = (e) => {
+interface Profile {
+    name: string;
+    email: string;
+    phone: string;
+    role: string;
+    password: string;
+    confirmPassword: string;
+}
+
+interface ChangeEvent {
+    target: {
+        name: string;
+        value: string;
+    };
+}
+
+const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (profile.password !== profile.confirmPassword) {
-      alert("Passwords do not match.");
-      return;
+        alert("Passwords do not match.");
+        return;
     }
 
     alert("Profile updated successfully!");
     console.log("Updated Profile:", profile);
-  };
+};
+
+const handleChange = (e: ChangeEvent) => {
+    const { name, value } = e.target;
+    setProfile({ ...profile, [name]: value });
+};
 
   return (
-    <div className="p-5 bg-gray-100 min-h-screen mt-9">
+    <div className="main-content p-5 bg-gray-100 min-h-screen mt-9">
       <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
         <h1 className="text-2xl font-bold mb-6 text-center lg:text-3xl">Profile Settings</h1>
 
