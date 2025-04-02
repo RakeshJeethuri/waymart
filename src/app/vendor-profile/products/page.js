@@ -87,7 +87,8 @@ export default function InventoryManager() {
       console.log(e);
     }
     console.log(products);
-    setProducts(products.filter((product) => product.id !== id));
+    setProducts(products.filter((product) => product._id !== id));
+    console.log(products)
   };
 
   const handleEdit = (product) => {
