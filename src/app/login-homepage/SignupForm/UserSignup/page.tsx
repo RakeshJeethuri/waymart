@@ -40,6 +40,7 @@ const Signup: React.FC<UserSignupProps> = ({ setOtpPage }) => {
     try {
       const res =await axios.post("/api/users/signup", { username:formData.name, email:formData.email, password:formData.password, phone :formData.phone});
       localStorage.setItem("userEmail", formData.email);
+      localStorage.setItem("userPassword",formData.password);
       setFormData({
         name: "",
         email: "",

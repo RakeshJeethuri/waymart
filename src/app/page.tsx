@@ -68,7 +68,7 @@ export default function Home() {
         <main className='mt-14'>
           <section className="container mx-auto ">
             <div
-              className="relative h-[480px] bg-cover bg-center flex transition-all duration-500 ease-in-out hover:scale-105"
+              className="relative bg-no-repeat h-[480px] bg-cover bg-center flex transition-all duration-500 ease-in-out hover:scale-105"
               style={{ backgroundImage: "url('/homepage-bg-1.jpg')" }}
             >
               <div className="container mx-auto mt-8 px-6 md:px-12 lg:px-16 xl:px-20">
