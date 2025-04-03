@@ -68,17 +68,20 @@ export default function InventoryManager() {
 
   const COLORS = ["#4CAF50", "#FF5733"];
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id,img_id) => {
     console.log(id);
     try{
-      const res = await axios.delete("/api/products/delete", {
-        params: {
-          productId: id,
-          vendorId: vendordetails._id
-        }
+      const res = await axios.delete(`/api/products/delete?productId=${id}&vendorId=${vendordetails._id}&imgId=${img_id}`
+      //   , {
+      //   params: {
+      //     productId: id,
+      //     vendorId: vendordetails._id,
+      //     imgId:img_id
+      //   }
        
 
-      });
+      // }
+    );
       console.log(res);
       
 
@@ -144,7 +147,7 @@ export default function InventoryManager() {
       });
       console.log(res.data.publicId);
       newProduct.image = res.data.publicId;
-      setProducts([...products, { ...newProduct, id: products.length + 1 }]);
+      setProducts([...products, { ...newProduct, _id: res.data.product._id }]);
       // setNewProduct({ name: "", category: "Fruits", price: "", stock: "", weight: "", image: null, description: "" });
     } catch (error) {
       console.error("Error while adding product:", error);
@@ -321,7 +324,7 @@ export default function InventoryManager() {
                     <FaEdit />
                   </button>
                 )}
-                <button onClick={() => handleDelete(product._id)} className="px-3 py-1 bg-red-500 text-white rounded flex items-center gap-1">
+                <button onClick={() => handleDelete(product._id, product.image)} className="px-3 py-1 bg-red-500 text-white rounded flex items-center gap-1">
                   <FaTrash />
                 </button>
               </div>
