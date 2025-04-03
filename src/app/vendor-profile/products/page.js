@@ -74,7 +74,7 @@ export default function InventoryManager() {
   const handleDelete = async (id) => {
     console.log(id);
     try{
-      const res = await axios.delete("/api/products", {
+      const res = await axios.delete("/api/products/delete", {
         params: {
           productId: id,
           vendorId: vendordetails._id

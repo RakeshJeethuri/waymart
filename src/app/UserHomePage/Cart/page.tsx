@@ -5,7 +5,8 @@ import axios from "axios";
 import "./style.css";
 import Layout from "../Layout/page";
 import { handleUseCurrentLocation } from "@/utils/locationUtils";
-import {toast ,ToastContainer} from "react-toastify"
+import { toast, ToastContainer } from "react-toastify";
+import { CldImage } from 'next-cloudinary';
 
 const API_URL = "/api/cart";
 
@@ -29,21 +30,20 @@ const CartPage = () => {
 	const [tip, setTip] = useState(0);
 	const [selectedTipButton, setSelectedTipButton] = useState<number | null>(null);
 	const [location, setLocation] = useState("");
-   const [isEditable, setIsEditable] = useState(false); // Track the selected tip button
+	const [isEditable, setIsEditable] = useState(false); // Track the selected tip button
 
-	 const placeorder = async ()=>{
-		try{
-			const res = await axios.post("/api/order",{userId: user?._id, orderTotal : getTotalAmount(),address:location});
+	const placeorder = async () => {
+		try {
+			const res = await axios.post("/api/order", { userId: user?._id, orderTotal: getTotalAmount(), address: location });
 			console.log(res);
-			const res1 = await axios.post("/api/address",{userId: user?._id,address:location})
+			const res1 = await axios.post("/api/address", { userId: user?._id, address: location })
 			console.log(res1)
 			toast.success("Order placed")
 		}
-		catch(e)
-		{
+		catch (e) {
 			console.log(e);
 		}
-	 }
+	}
 	// Function to update the tip
 	const handleTip = (amount: number) => {
 		if (selectedTipButton === amount) {
@@ -120,17 +120,16 @@ const CartPage = () => {
 			handleRemove(productId);
 		}
 	};
-    const handleButtonClick = async ()=>
-	{
+	const handleButtonClick = async () => {
 		try {
 			const data = await handleUseCurrentLocation();
 			console.log(data);
 			setLocation(data.display_name);
-		  } catch (error) {
+		} catch (error) {
 			console.error(error);
-		  }
+		}
 	}
-	
+
 
 	// Open Checkout Modal
 	const handleCheckout = () => {
@@ -161,7 +160,7 @@ const CartPage = () => {
 	};
 	const handleLocationChange = (event) => {
 		setLocation(event.target.value);
-	  };
+	};
 
 	const calculateTotal = () => {
 		return cart
@@ -186,7 +185,19 @@ const CartPage = () => {
 								{item.product && (
 									<>
 										<div>
-											<img src={item.product.image} alt={item.product.name} />
+
+											<CldImage
+												width="600"
+												height="600"
+												src={item.product.image}
+												sizes="100vw"
+												alt="transformed image"
+												crop="fill"
+												// aspectRatio={socialFormats[selectedFormat].aspectRatio}
+												gravity='auto'
+
+											// onLoad={() => setIsTransforming(false)}
+											/>
 											<h2>{item.product.name}</h2>
 											<p>Price: ${item.product.price}</p>
 										</div>
@@ -225,7 +236,7 @@ const CartPage = () => {
 					</div>
 				)}
 				<div className="back"><a href="/UserHomePage/Home" className="back-btn">Back</a></div>
-				
+
 			</div>
 			{showModal && (
 				<div className="modal-overlay">
@@ -260,39 +271,39 @@ const CartPage = () => {
 
 							<p><strong>Delivery Partner Tip:</strong>
 								<div className="tip-buttons">
-									<button 
-										className={`tip-button ${selectedTipButton === 10 ? 'selected' : ''}`} 
+									<button
+										className={`tip-button ${selectedTipButton === 10 ? 'selected' : ''}`}
 										onClick={() => handleTip(10)}>
 										₹10
 									</button>
-									<button 
-										className={`tip-button ${selectedTipButton === 20 ? 'selected' : ''}`} 
+									<button
+										className={`tip-button ${selectedTipButton === 20 ? 'selected' : ''}`}
 										onClick={() => handleTip(20)}>
 										₹20
 									</button>
-									<button 
-										className={`tip-button ${selectedTipButton === 30 ? 'selected' : ''}`} 
+									<button
+										className={`tip-button ${selectedTipButton === 30 ? 'selected' : ''}`}
 										onClick={() => handleTip(30)}>
 										₹30
 									</button>
 								</div>
 							</p>
 
-							<p><strong>Delivery Instructions:</strong> 
+							<p><strong>Delivery Instructions:</strong>
 								<textarea placeholder="Add any instructions for delivery" className="instructions-textarea"></textarea>
 							</p>
 
 							<p><strong>Total Amount:</strong> ${getTotalAmount()}</p>
 							<div className="flex gap-3">
-								<button 
-									onClick={handleButtonClick} 
+								<button
+									onClick={handleButtonClick}
 									className=" w-2xs px-6 py-2 h-10 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
 								>
 									Use My Location
 								</button>
 
 								<div className="w-full ">
-								<textarea
+									<textarea
 										value={location}
 										onChange={handleLocationChange}
 										placeholder="Enter your location"
@@ -300,9 +311,9 @@ const CartPage = () => {
 										className="w-full h-32 p-5  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-justify resize-none"
 									/>
 								</div>
-								</div>
+							</div>
 						</div>
-                        
+
 						<div className="modal-buttons">
 							<button className="order-button" onClick={placeorder}>Place Order</button>
 							<button className="close-button" onClick={closeModal}>Cancel</button>
