@@ -8,39 +8,39 @@ import { getCldImageUrl } from 'next-cloudinary';
 connect();
 
 /** 🛍️ ADD PRODUCT (Only Vendor) */
-export async function POST(request: NextRequest) { 
-    try {
-        const body = await request.json();
-        const { vendorId, name, description, price, stock, category, image } = body;
+// export async function POST(request: NextRequest) { 
+//     try {
+//         const body = await request.json();
+//         const { vendorId, name, description, price, stock, category, image } = body;
 
-        if (!vendorId || !name || !description || !price || !stock || !category || !image) {
-            return NextResponse.json({ error: "All fields are required" }, { status: 400 });
-        }
+//         if (!vendorId || !name || !description || !price || !stock || !category || !image) {
+//             return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+//         }
 
-        // Check if vendor exists
-        const vendor = await Vendor.findById(vendorId);
-        if (!vendor) {
-            return NextResponse.json({ error: "Vendor not found" }, { status: 404 });
-        }
-        const url = getCldImageUrl({
-            width: 960,
-            height: 600,
-            src: '"C:/Users/Pavan/Downloads/logo.png"'
-          });
-        // Create new product
-        const product = new Product({ vendor: vendorId, name, description, price, stock, category, image:url });
-        await product.save();
+//         // Check if vendor exists
+//         const vendor = await Vendor.findById(vendorId);
+//         if (!vendor) {
+//             return NextResponse.json({ error: "Vendor not found" }, { status: 404 });
+//         }
+//         const url = getCldImageUrl({
+//             width: 960,
+//             height: 600,
+//             src: '"C:/Users/Pavan/Downloads/logo.png"'
+//           });
+//         // Create new product
+//         const product = new Product({ vendor: vendorId, name, description, price, stock, category, image:url });
+//         await product.save();
 
-        return NextResponse.json({
-            message: "Product added successfully",
-            success: true,
-            product
-        }, { status: 201 });
+//         return NextResponse.json({
+//             message: "Product added successfully",
+//             success: true,
+//             product
+//         }, { status: 201 });
 
-    } catch (error:any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-}
+//     } catch (error:any) {
+//         return NextResponse.json({ error: error.message }, { status: 500 });
+//     }
+// }
 
 /** 🛍️ GET ALL PRODUCTS */
 export async function GET() {

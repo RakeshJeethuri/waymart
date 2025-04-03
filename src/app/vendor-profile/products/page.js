@@ -3,12 +3,13 @@ import { useState,useEffect } from "react";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import { CldImage } from 'next-cloudinary';
-
+import FileUpload from "../components/ui/FileUpload";
 import axios from "axios";
 
 var sampleProducts = [];
 
 export default function InventoryManager() {
+  const [resetFile, setResetFile] = useState(false);
   const [products, setProducts] = useState(sampleProducts );
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState("");
@@ -59,12 +60,14 @@ export default function InventoryManager() {
  
   const totalProducts = products.length;
   const inStockCount = products.filter(p => p.stock > 0).length;
-  const outOfStockCount = products.filter(p => p.stock === 0).length;
 
+  const outOfStockCount = products.filter(p => p.stock === 0).length;
+ 
   const pieData = [
     { name: "In Stock", value: inStockCount },
     { name: "Out of Stock", value: outOfStockCount },
   ];
+  localStorage.setItem("outStock", outOfStockCount);
 
   const COLORS = ["#4CAF50", "#FF5733"];
 
@@ -113,18 +116,18 @@ export default function InventoryManager() {
   };
 
 
-  const handleFileUpload = (e/*: React.ChangeEvent<HTMLInputElement>*/) => {
-    const file = e.target.files?.[0] || null; // Get the selected file
+  
+  const handleFileUpload1 = (file/*: React.ChangeEvent<HTMLInputElement>*/) => {
+    // Get the selected file
+    console.log(file);
     setNewProduct((prev) => ({ ...prev, image: file })); // Update the state with the file
   };
 
  
-  const handleUpload = (result) => {
-    console.log("Upload result:", result);
-  };
+
 
   const handleAddProduct = async () => {
-    if (!newProduct.name || !newProduct.category || !newProduct.price || !newProduct.stock || !newProduct.image) {
+    if (!newProduct.name || !newProduct.category || !newProduct.price || newProduct.stock<0 || !newProduct.image) {
       console.log(newProduct);
       console.log("All fields are required");
       return;
@@ -154,6 +157,8 @@ export default function InventoryManager() {
     }
     console.log("handlkes");
     setNewProduct({ name: "", category: "Fruits", price: "", stock: "", weight: "",description:"",image:"",addedBy: "Vendor A" });
+    setResetFile((prev) => !prev);
+   
     
   };
   return (
@@ -201,13 +206,7 @@ export default function InventoryManager() {
             onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
             className="border p-2 rounded w-full mb-2"
           />
-          {/* <input
-            type="text"
-            placeholder="image"
-            value={newProduct.image}
-            onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
-            className="border p-2 rounded w-full mb-2"
-          /> */}
+         
           <input
             type="number"
             placeholder="Stock"
@@ -216,17 +215,14 @@ export default function InventoryManager() {
             className="border p-2 rounded w-full mb-2"
           />
          
-          <input
-  type="file"
-  onChange={handleFileUpload}
-  className="file-input file-input-bordered file-input-primary w-full"
-/>
-          <button onClick={handleAddProduct} className="px-3 py-1 bg-[#FD0054] cursor-pointer text-white rounded flex items-center gap-1">
+        
+          <FileUpload onFileSelect={(file)=>handleFileUpload1(file)} resetTrigger={resetFile}/>
+          <button onClick={handleAddProduct} className="ml-[40%] mt-2 px-3 py-1 bg-[#FD0054] cursor-pointer text-white rounded flex items-center gap-1">
             <FaPlus /> Add Product
           </button>
           {/* {vendordetails} */}
         </div>
-        <div className="dashboard p-4 bg-white rounded shadow w-1/3">
+        <div className="dashboard p-4 bg-white rounded shadow w-1/2">
           <h2 className="text-xl font-bold mb-2">Dashboard</h2>
           <p>Total Products: {totalProducts}</p>
           <p>In Stock: {inStockCount}</p>

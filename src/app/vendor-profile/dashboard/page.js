@@ -17,7 +17,7 @@ export default function Dashboard() {
         </div>
         <div className="stat-card bg-[#FBF9FA] p-4 rounded shadow">
           <h3 className="text-xl font-bold mb-2">Low Stock</h3>
-          <p className="stat-value text-2xl text-[#FD0054]">12</p>
+          <p className="stat-value text-2xl text-[#FD0054]">{localStorage.getItem("outStock")}</p>
         </div>
       </section>
       <section className="orders-inventory grid grid-cols-2 gap-4 text-[#2B2024]">
