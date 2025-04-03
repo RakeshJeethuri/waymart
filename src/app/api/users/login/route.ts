@@ -35,6 +35,7 @@ export async function POST(request:NextRequest) {
         )
         response.cookies.set("token",token,{httpOnly:true,
             path:"/"})
+        response.cookies.set("userType", "user", { httpOnly: true, path: "/" });
         return response
 
         console.log(reqBody);
