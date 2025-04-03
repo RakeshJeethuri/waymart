@@ -71,7 +71,7 @@ export default function InventoryManager() {
   const handleDelete = async (id) => {
     console.log(id);
     try{
-      const res = await axios.delete("/api/products", {
+      const res = await axios.delete("/api/products/delete", {
         params: {
           productId: id,
           vendorId: vendordetails._id
@@ -159,7 +159,7 @@ export default function InventoryManager() {
           "Content-Type": "multipart/form-data", // Set the correct content type
         },
       });
-      console.log(res.data);
+      console.log(res.data.publicId);
       setProducts([...products, { ...newProduct, id: products.length + 1 }]);
       // setNewProduct({ name: "", category: "Fruits", price: "", stock: "", weight: "", image: null, description: "" });
     } catch (error) {
