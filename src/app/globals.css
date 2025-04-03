@@ -25,7 +25,3 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.main-content {
-  margin-top: 60px; /* Adjust this value to match the height of the navbar */
-  padding: 20px;
-}

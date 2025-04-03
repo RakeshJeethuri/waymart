@@ -3,6 +3,7 @@ import { useState,useEffect } from "react";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import { CldImage } from 'next-cloudinary';
+
 import axios from "axios";
 
 var sampleProducts = [];
@@ -13,7 +14,7 @@ export default function InventoryManager() {
   const [search, setSearch] = useState("");
   const [editingProduct, setEditingProduct] = useState(null);
   const [editValues, setEditValues] = useState({ name: "", price: "", weight: "", stock: "" });
-  const [newProduct, setNewProduct] = useState({ name: "", category: "Fruits", price: "", stock: "", weight: "",image:"", description: "" ,vendorId: "",image:null });
+  const [newProduct, setNewProduct] = useState({ name: "", category: "Fruits", price: "", stock: "", weight: "", description: "" ,vendorId: "",image:null });
   const [vendordetails,setVendordetails] = useState({});
   const filteredProducts = products.filter(
     (p) => (category === "All" || p.category === category) && p.name.toLowerCase().includes(search.toLowerCase())
@@ -22,7 +23,6 @@ export default function InventoryManager() {
     const fetchData = async () => {
       try {
         const res = await axios.get("/api/vendors/me");
-        // setVendordetails(res.data.data);
         setVendordetails(res.data.data)
         
       } catch (error) {
@@ -115,31 +115,14 @@ export default function InventoryManager() {
     setNewProduct((prev) => ({ ...prev, image: file })); // Update the state with the file
   };
 
-  // const handleAddProduct =  async () => {
-
-  //   console.log("handlkes");
-  //   if (!newProduct.name || !newProduct.category || !newProduct.price || !newProduct.stock ) 
-  //     {
-  //       console.log(newProduct);
-  //       return;
-  //     }
-
-  //   newProduct.vendorId = vendordetails._id;
-  //   try{
-  //     const res = await axios.post("/api/products",newProduct);
-  //     console.log(res)
-  //   }
-  //   catch{
-  //     console.log("errror")
-  //   }
-  //   setProducts([...products, { ...newProduct, id: products.length + 1 }]);
-  //   setNewProduct({ name: "", category: "Fruits", price: "", stock: "", weight: "", addedBy: "Vendor A" });
-    
-  // };
-
+ 
+  const handleUpload = (result) => {
+    console.log("Upload result:", result);
+  };
 
   const handleAddProduct = async () => {
     if (!newProduct.name || !newProduct.category || !newProduct.price || !newProduct.stock || !newProduct.image) {
+      console.log(newProduct);
       console.log("All fields are required");
       return;
     }
@@ -159,28 +142,14 @@ export default function InventoryManager() {
           "Content-Type": "multipart/form-data", // Set the correct content type
         },
       });
-      console.log(res.data);
+      console.log(res.data.publicId);
+      newProduct.image = res.data.publicId;
       setProducts([...products, { ...newProduct, id: products.length + 1 }]);
       // setNewProduct({ name: "", category: "Fruits", price: "", stock: "", weight: "", image: null, description: "" });
     } catch (error) {
       console.error("Error while adding product:", error);
     }
     console.log("handlkes");
-    if (!newProduct.name || !newProduct.category || !newProduct.price  ) 
-      {
-        console.log(newProduct);
-        return;
-      }
-
-    newProduct.vendorId = vendordetails._id;
-    try{
-      const res = await axios.post("/api/products",newProduct);
-      console.log(res)
-    }
-    catch{
-      console.log("errror")
-    }
-    setProducts([...products, { ...newProduct, id: products.length + 1 }]);
     setNewProduct({ name: "", category: "Fruits", price: "", stock: "", weight: "",description:"",image:"",addedBy: "Vendor A" });
     
   };
@@ -243,6 +212,7 @@ export default function InventoryManager() {
             onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
             className="border p-2 rounded w-full mb-2"
           />
+         
           <input
   type="file"
   onChange={handleFileUpload}

@@ -11,6 +11,7 @@ const VerifyAccount = () => {
 
   useEffect(() => {
     const storedEmail = localStorage.getItem("userEmail");
+   
     if (storedEmail) {
       setEmail(storedEmail);
     } else {
@@ -22,9 +23,21 @@ const VerifyAccount = () => {
     e.preventDefault();
     try {
       const response = await axios.post("/api/users/validateOtp", { email, userotp });
-
+     
       if (response.data.success) {
+        const password  = localStorage.getItem("userPassword");
+        try{
+          const res = await axios.post("/api/users/login",{email,password});
+        
+        }
+        catch(e)
+        {
+          console.log(e);
+        }
+        
+        localStorage.removeItem("userPassword");
         localStorage.removeItem("userEmail");
+    
         router.push("/UserHomePage/Home");
       } else {
         alert(response.data.message || "OTP verification failed");
