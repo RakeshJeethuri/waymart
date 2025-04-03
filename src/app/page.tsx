@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
+import { FacebookIcon, TwitterIcon, InstagramIcon, LinkedinIcon } from "lucide-react";
 // Dynamically import MapContainer and related components
 const DynamicMap = dynamic(() => import('./components/Map'), { ssr: false });
 
@@ -54,12 +55,12 @@ export default function Home() {
             </div>
 
             {/* Navigation Links */}
-            <div className={`md:flex items-center space-x-4 absolute md:static top-16 right-0 bg-white w-full md:w-auto md:bg-transparent shadow-md md:shadow-none p-4 md:p-0 transition-all duration-300 ease-in-out ${menuOpen ? 'block p-4' : 'hidden'}`}>
+            <div className={` max-md:max-w-fit md:flex items-center max-md:space-y-2 space-x-4 absolute md:static top-16 right-0 bg-white w-full md:w-auto md:bg-transparent shadow-md md:shadow-none p-4 md:p-0 transition-all duration-300 ease-in-out ${menuOpen ? 'block p-4' : 'hidden'}`}>
               <a href="#home" className="block md:inline-block hover:text-[#FD0054]">Home</a>
               <a href="#about" className="block md:inline-block hover:text-[#FD0054]">About</a>
               <a href="#products" className="block md:inline-block hover:text-[#FD0054]">Products</a>
               <a href="/login-homepage" className="block md:inline-block hover:text-[#FD0054]">Login</a>
-              <a href="#form" className="block md:inline-block bg-[#FD0054] text-white px-4 py-1 rounded">CONTACT</a>
+              <a href="#form" className="block md:inline-block max-md:max-w-fit bg-[#FD0054] text-white px-4 py-1 rounded">CONTACT</a>
             </div>
           </nav>
         </header>
@@ -72,7 +73,7 @@ export default function Home() {
               style={{ backgroundImage: "url('/homepage-bg-1.jpg')" }}
             >
               <div className="container mx-auto mt-8 px-6 md:px-12 lg:px-16 xl:px-20">
-                <div className="bg-opacity-80 p-4 md:p-10 rounded-lg max-w-lg transition-all duration-300 ease-in-out ">
+                <div className="bg-opacity-80 p-4 md:p-10 rounded-lg max-w-lg transition-all duration-50 ease-in-out ">
                   <p className="text-[#FD0054] mb-2 text-lg font-semibold">DISCOVER FRESHNESS</p>
                   <h1 className="text-4xl font-bold mb-4 text-[#2B2024]">Your online grocery solution</h1>
                   <p className="text-gray-700 mb-4">
@@ -213,7 +214,7 @@ export default function Home() {
                   ))}
                   <div>
                     <label className="block mb-2">Message</label>
-                    <textarea className="w-full p-3 border rounded transition-all hover:shadow-xl" rows="4"></textarea>
+                    <textarea className="w-full p-3 border rounded transition-all hover:shadow-xl" rows={4} ></textarea>
                   </div>
                   <div>
                     <label className="flex items-center">
@@ -228,9 +229,9 @@ export default function Home() {
               </div>
 
               {/* Google Map Section */}
-              <section className="map-section p-8 bg-gray-100">
+              <section className="map-section py-8 bg-gray-100  max-md:h-[75%] rounded-lg">
                 <h2 className="text-3xl font-bold text-center mb-6 text-[#A80038]">Our Service Points</h2>
-                <div className="rounded-lg overflow-hidden shadow-lg">
+                <div className=" overflow-hidden shadow-lg">
                   <DynamicMap />
                 </div>
               </section>
@@ -240,11 +241,64 @@ export default function Home() {
         </main>
 
         {/* Footer */}
-        <footer className="bg-[#2B2024] text-white py-8">
+        {/* <footer className="bg-[#2B2024] text-white py-8">
           <div className="container mx-auto px-4 text-center">
             <p>&copy; 2025 WayMart. All rights reserved.</p>
           </div>
-        </footer>
+        </footer> */}
+        <footer className="bg-[#2B2024] text-white py-8">
+  <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8">
+    
+    {/* Left Column - Company Info & Navigation */}
+    <div className="text-center md:text-left">
+      <h2 className="text-2xl font-semibold mb-4">WayMart</h2>
+      <p className="text-sm mb-4">
+        Your trusted marketplace for fresh vegetables, fruits, and cereals.
+      </p>
+      <nav>
+        <ul className="space-y-2">
+          <li><a href="/about" className="hover:underline">About Us</a></li>
+          <li><a href="/contact" className="hover:underline">Contact</a></li>
+          <li><a href="/privacy-policy" className="hover:underline">Privacy Policy</a></li>
+          <li><a href="/terms" className="hover:underline">Terms & Conditions</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    {/* Right Column - Contact & Social Media */}
+    <div className="text-center space-y-2 md:text-right">
+      <h2 className="text-lg font-semibold mb-4">Get in Touch</h2>
+      <p className="text-sm">📍 Sohini Tech Park , Hyderabad , India </p>
+      <p className="text-sm">📞 +91 0110-2000-02</p>
+      <p>You can write your queries in contact form</p>
+      <p className="text-sm mb-4">✉️ support@waymart.com</p>
+      <></>
+      
+      {/* Social Media Icons */}
+      <div className="flex justify-center  md:justify-end space-x-4">
+            <a href="#" aria-label="Facebook">
+              <FacebookIcon className="w-6 h-6 hover:text-gray-400" />
+            </a>
+            <a href="#" aria-label="Twitter">
+              <TwitterIcon className="w-6 h-6 hover:text-gray-400" />
+            </a>
+            <a href="#" aria-label="Instagram">
+              <InstagramIcon className="w-6 h-6 hover:text-gray-400" />
+            </a>
+            <a href="#" aria-label="LinkedIn">
+              <LinkedinIcon className="w-6 h-6 hover:text-gray-400" />
+            </a>
+          </div>
+     
+    </div>
+  </div>
+
+  {/* Bottom Section - Copyright */}
+  <div className="text-center text-xs mt-8 border-t border-gray-600 pt-4">
+    &copy; 2025 WayMart. All rights reserved.
+  </div>
+</footer>
+
       </div>
     </>
   );

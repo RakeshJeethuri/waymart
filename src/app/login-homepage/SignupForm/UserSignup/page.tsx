@@ -35,7 +35,7 @@ const Signup: React.FC<UserSignupProps> = ({ setOtpPage }) => {
     setShowPassword(!showPassword);
   };
  
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
       const res =await axios.post("/api/users/signup", { username:formData.name, email:formData.email, password:formData.password, phone :formData.phone});
