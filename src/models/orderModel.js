@@ -16,7 +16,21 @@ const orderSchema = new mongoose.Schema({
             quantity: {
                 type: Number,
                 required: true
-            }
+            },
+            confrom: {
+                type: Boolean,
+                default: false
+            },
+            price: {
+                type: Number,
+                required: true
+            },
+            vendor: {  // Adding vendor reference here
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Vendor",
+                required: true
+            },
+
         }
     ],
     orderTotal: {

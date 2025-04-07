@@ -50,7 +50,7 @@ const Login = () => {
         // setTimeout(()=>{
 
         // },2000);
-        router.push("/UserHomePage/Home");
+        router.push("/user-profile");
         
     } catch (error:any) {
 

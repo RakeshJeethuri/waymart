@@ -339,7 +339,7 @@ const Home = () => {
 
 	return (
 		<Layout>
-			<div className="main-content home">
+			<div className="home">
 			{user ? <h2>Hello, {user.username}!</h2> : <h2>Welcome to WayMart!</h2>}
 
 				<div className="category">
