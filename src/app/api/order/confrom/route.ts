@@ -4,7 +4,6 @@ import { connect } from "@/dbConfig/dbConfig";
 connect();
 export async function PUT(request: NextRequest) {
     try {
-         // Ensure database connection
 
         const body = await request.json();
         const { orderId, productId, vendorId } = body; // Extract parameters from body
@@ -15,7 +14,7 @@ export async function PUT(request: NextRequest) {
 
         // Find the order and update the product's "confrom" field
         const order = await Order.findOneAndUpdate(
-            { _id: orderId, "products._id": productId, "products.vendor": vendorId },
+            { _id: orderId, "products.product": productId, "products.vendor": vendorId },
             { $set: { "products.$.confrom": true } },
             { new: true }
         );
