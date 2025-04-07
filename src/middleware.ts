@@ -47,18 +47,18 @@ export function middleware(request: NextRequest) {
     if (userType === "vendor") {
       return NextResponse.redirect(new URL("/vendor-profile/dashboard", request.nextUrl));
     } else {
-      return NextResponse.redirect(new URL("/UserHomePage/Home", request.nextUrl));
+      return NextResponse.redirect(new URL("/user-profile", request.nextUrl));
     }
   }
 
   // Restrict vendors from accessing user routes
-  if (userType === "vendor" && path.startsWith("/UserHomePage")) {
+  if (userType === "vendor" && path.startsWith("/user-profile")) {
     return NextResponse.redirect(new URL("/vendor-profile/dashboard", request.nextUrl));
   }
 
   // Restrict users from accessing vendor routes
   if (userType === "user" && path.startsWith("/vendor-profile")) {
-    return NextResponse.redirect(new URL("/UserHomePage/Home", request.nextUrl));
+    return NextResponse.redirect(new URL("/user-profile", request.nextUrl));
   }
 
   // Redirect to login-homepage if trying to access protected routes without a token
@@ -73,8 +73,8 @@ export const config = {
   matcher: [
     "/",
     "/login-homepage",
-    "/UserHomePage/Home",
-    "/UserHomePage/:path*",
+    "/user-profile",
+    "/user-profile/:path*",
     "/vendor-profile/:path*",
   ],
 };

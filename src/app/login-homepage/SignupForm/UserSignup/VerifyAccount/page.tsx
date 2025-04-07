@@ -38,7 +38,7 @@ const VerifyAccount = () => {
         localStorage.removeItem("userPassword");
         localStorage.removeItem("userEmail");
     
-        router.push("/UserHomePage/Home");
+        router.push("/user-profile");
       } else {
         alert(response.data.message || "OTP verification failed");
       }

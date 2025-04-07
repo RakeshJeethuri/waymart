@@ -40,7 +40,7 @@
 /* Products grid */
 .products {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 250px);
+    grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     
 }
@@ -133,7 +133,9 @@
 /* Responsive styles */
 @media (max-width: 768px) {
     .products {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fit,  1fr);
+        justify-content: center;
+       
     }
 
     .product-card img {
