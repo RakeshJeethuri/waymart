@@ -11,47 +11,81 @@ connect();
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { userId ,orderTotal ,address} = body;
+        const { userId, orderTotal, address } = body;
 
         if (!userId || !orderTotal || !address) {
-            return NextResponse.json({ error: "request body failed" }, { status: 400 });
+            return NextResponse.json({ error: "Request body failed" }, { status: 400 });
         }
 
-        // Get user's cart
+        // Get user's cart with product and vendor details
         const cart = await Cart.findOne({ user: userId }).populate("products.product");
 
         if (!cart || cart.products.length === 0) {
             return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
         }
 
-        // Calculate order total
-        // const orderTotal = cart.products.reduce((total: number, item: any) => total + item.product.price * item.quantity, 0);
+        // Filter out any products that are null (deleted from DB but still in cart)
+        cart.products = cart.products.filter((item: { product: null; }) => item.product !== null);
+
+        if (cart.products.length === 0) {
+            return NextResponse.json({ error: "Cart contains invalid products" }, { status: 400 });
+        }
+
+        // Extract vendor IDs for each product
+        const productsWithVendor = cart.products.map((item: { product: { _id: any; vendor: any; price: number }; quantity: any; }) => ({
+            product: item.product._id,
+            quantity: item.quantity,
+            price: item.product.price,
+            vendor: item.product.vendor, // Ensure vendor ID is included
+            confrom: false
+        }));
 
         // Create order
         const order = new Order({
             user: userId,
-            products: cart.products,
+            products: productsWithVendor,
             orderTotal,
             address
         });
 
         await order.save();
 
+        // Decrement the quantity of products from vendor's inventory
+        for (const item of cart.products) {
+            await Product.findByIdAndUpdate(item.product._id, {
+                $inc: { stock: -item.quantity }
+            });
+        }
+
         // Clear user's cart after order is placed
         await Cart.findOneAndDelete({ user: userId });
+
+        // **Populate response to include vendor details**
+        const populatedOrder = await Order.findById(order._id)
+            .populate({
+                path: "products.product",
+                select: "name price vendor", // Select vendor info
+                populate: {
+                    path: "vendor", // Populate vendor details
+                    select: "name _id" // Get vendor ID and name
+                }
+            })
+            .lean();
 
         return NextResponse.json({
             message: "Order placed successfully",
             success: true,
-            order
+            order: populatedOrder
         }, { status: 201 });
 
-    } catch (error:any) {
+    } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
 
-/** 🛒 GET USER ORDERS */
+
+
+/**  GET USER ORDERS */
 export async function GET(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url);
@@ -78,7 +112,7 @@ export async function GET(request: NextRequest) {
     }
 }
 
-/** 🚀 UPDATE ORDER STATUS */
+/**  UPDATE ORDER STATUS */
 export async function PUT(request: NextRequest) {
     try {
         const body = await request.json();
@@ -112,36 +146,8 @@ export async function PUT(request: NextRequest) {
     }
 }
 
-/** 🚀 GET ORDER BY ID */
-// export async function GET(request: NextRequest) {
-//     try {
-//         const { searchParams } = new URL(request.url);
-//         const orderId = searchParams.get("orderId");
 
-//         if (!orderId) {
-//             return NextResponse.json({ error: "Order ID is required" }, { status: 400 });
-//         }
-
-//         const order = await Order.findById(orderId)
-//             .populate("user", "username email")
-//             .populate("products.product", "name price");
-
-//         if (!order) {
-//             return NextResponse.json({ error: "Order not found" }, { status: 404 });
-//         }
-
-//         return NextResponse.json({
-//             message: "Order retrieved successfully",
-//             success: true,
-//             order
-//         });
-
-//     } catch (error:any) {
-//         return NextResponse.json({ error: error.message }, { status: 500 });
-//     }
-// }
-
-/** 🚀 CANCEL ORDER */
+/**  CANCEL ORDER */
 export async function DELETE(request: NextRequest) {
     try {
         const body = await request.json();
