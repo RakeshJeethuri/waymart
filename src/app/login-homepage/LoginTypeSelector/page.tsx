@@ -3,7 +3,7 @@ const LoginTypeSelector = ({ setLoginType }) => (
   <div className="flex flex-col items-center justify-center bg-[#FBF9FA]  gap-6">
     <button
       onClick={() => setLoginType("user")}
-      className="hover:scale-105 transition-transform duration-200 ease-in-out"
+      className="hover:scale-105 transition-transform duration-200 ease-in-out cursor-pointer"
     >
       <img
         src="/images/user-icon.png"
@@ -15,7 +15,7 @@ const LoginTypeSelector = ({ setLoginType }) => (
     </button>
     <button
       onClick={() => setLoginType("vendor")}
-      className="hover:scale-105 transition-transform duration-200 ease-in-out"
+      className="hover:scale-105 transition-transform duration-200 ease-in-out cursor-pointer"
     >
       <img
         src="/images/vendor-icon.png"

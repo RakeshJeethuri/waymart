@@ -41,7 +41,7 @@ const LoginSignup = () => {
                 setActiveTab("login");
                 setLoginType(null);
               }}
-              className={`w-1/2 p-3 border-b-2 ${
+              className={`w-1/2 p-3 border-b-2 cursor-pointer ${
                 activeTab === "login" ? "border-red-500" : "text-gray-400"
               }`}
             >
@@ -52,7 +52,7 @@ const LoginSignup = () => {
                 setActiveTab("signup");
                 setLoginType(null);
               }}
-              className={`w-1/2 p-3 border-b-2 ${
+              className={`w-1/2 p-3 border-b-2 cursor-pointer ${
                 activeTab === "signup" ? "border-red-500" : "text-gray-400"
               }`}
             >

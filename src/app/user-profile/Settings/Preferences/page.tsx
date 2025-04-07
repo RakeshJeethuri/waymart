@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Layout from "../../Layout/page";
+import Layout from "../../layout";
 
 const AppPreferences = () => {
   const [preferences, setPreferences] = useState({
@@ -177,15 +177,15 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
           <div className="col-span-1 md:col-span-2 flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
             <button
               type="submit"
-              className="bg-[#A80038] text-white px-6 py-2 rounded-md hover:bg-[#FD0054] sm:w-auto"
+              className="bg-[#A80038] text-white px-6 py-2 rounded-md hover:bg-[#FD0054] sm:w-auto cursor-pointer"
             >
               Save Changes
             </button>
 
-            <Link href="/UserHomePage/Settings">
+            <Link href="/user-profile/Settings">
               <button
                 type="button"
-                className="bg-[#Fd0054] text-white px-4 py-2 rounded-md hover:bg-[#A80038] sm:w-auto"
+                className="bg-[#Fd0054] text-white px-4 py-2 rounded-md hover:bg-[#A80038] sm:w-auto cursor-pointer"
               >
                 Back to Settings
               </button>

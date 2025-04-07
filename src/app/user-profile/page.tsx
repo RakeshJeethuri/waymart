@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-
 import axios from "axios";
 import { CldImage } from "next-cloudinary";
+import Nav from "./Navbar/page"; // Import Nav component
 
 const Home = () => {
   interface Product {
@@ -44,7 +44,7 @@ const Home = () => {
         if (currentUser?._id) {
           const cartResponse = await axios.get(`/api/cart?userId=${currentUser._id}`);
           if (cartResponse.data.success) {
-            const cartItems = cartResponse.data.cart.products.map((item: any) => ({
+            const cartItems = cartResponse.data.cart.products.map((item: { product: Product; quantity: number }) => ({
               ...item.product,
               quantity: item.quantity,
             }));
@@ -76,7 +76,7 @@ const Home = () => {
     const newQuantity = existingItem ? existingItem.quantity + 1 : 1;
 
     if (newQuantity > product.stock) {
-      alert("Only ${product.stock} available in stock.");
+      alert(`Only ${product.stock} available in stock.`);
       return;
     }
 
@@ -101,7 +101,7 @@ const Home = () => {
   const handleIncrement = async (productId: string) => {
     const cartItem = cart.find((item) => item._id === productId);
     if (!cartItem || cartItem.quantity >= cartItem.stock) {
-      alert("Only ${cartItem?.stock} available in stock.");
+      alert(`Only ${cartItem?.stock} available in stock.`);
       return;
     }
 
@@ -145,11 +145,28 @@ const Home = () => {
     }
   };
 
+  const handleSearch = (query: string) => {
+    if (query.trim() === "") {
+      // If the search bar is empty, revert to the previously filtered products
+      setFilteredProducts(products);
+    } else {
+      // Filter products based on the search query
+      setFilteredProducts(
+        products.filter((product) =>
+          product.name.toLowerCase().includes(query.toLowerCase())
+        )
+      );
+    }
+  };
+
   return (
-   
+    <div>
+      {/* Pass the handleSearch function to the Nav component */}
+      <Nav onSearch={handleSearch} />
+
       <div className="max-w-7xl mx-auto mt-16 p-6 max-md:mt-28">
         <h2 className="text-2xl text-center text-[#A80038] font-semibold mb-6">
-          {user ? `Hello, ${user.username}`! : "Welcome to WayMart!"}
+          {user ? `Hello, ${user.username}!` : "Welcome to WayMart!"}
         </h2>
 
         <div className="flex justify-center gap-4 mb-6">
@@ -179,7 +196,7 @@ const Home = () => {
                 <CldImage
                   width="960"
                   height="600"
-                  src={product.image}
+                  src={product.image || "fallback-image.jpg"} // Use fallback if image is missing
                   sizes="100vw"
                   alt={product.name}
                   crop="fill"
@@ -198,7 +215,7 @@ const Home = () => {
                   <div className="flex items-center justify-center gap-3 mt-2">
                     <button
                       onClick={() => handleDecrement(product._id)}
-                      className="bg-[#A80038] text-white px-3 py-1 rounded hover:bg-pink-200"
+                      className="bg-[#A80038] text-white px-3 py-1 rounded hover:bg-pink-200 cursor-pointer"
                     >
                       -
                     </button>
@@ -207,7 +224,7 @@ const Home = () => {
                     </span>
                     <button
                       onClick={() => handleIncrement(product._id)}
-                      className="bg-[#A80038] text-white px-3 py-1 rounded hover:bg-pink-200"
+                      className="bg-[#A80038] text-white px-3 py-1 rounded hover:bg-pink-200 cursor-pointer"
                     >
                       +
                     </button>
@@ -215,7 +232,7 @@ const Home = () => {
                 ) : (
                   <button
                     onClick={() => handleAddToCart(product)}
-                    className="bg-[#A80038] text-white mt-3 px-4 py-2 rounded hover:bg-pink-200"
+                    className="bg-[#A80038] text-white mt-3 px-4 py-2 rounded hover:bg-pink-200 cursor-pointer"
                   >
                     Add to Cart
                   </button>
@@ -225,7 +242,7 @@ const Home = () => {
           })}
         </div>
       </div>
-    
+    </div>
   );
 };
 

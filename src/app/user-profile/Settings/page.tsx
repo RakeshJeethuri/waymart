@@ -28,11 +28,11 @@ export default function Settings() {
 
         <section className="settings-list grid grid-cols-1 gap-4 text-[#2B2024]">
           {[
-            { title: "Profile Settings", desc: "Update your profile details and preferences.", path: "/UserHomePage/Settings/Profile" },
-            { title: "Security & Privacy", desc: "Manage your password and privacy settings.", path: "/UserHomePage/Settings/Security&Privacy" },
-            { title: "Notification Preferences", desc: "Customize your notification alerts.", path: "/UserHomePage/Settings/Notifications" },
-            { title: "Payment Settings", desc: "Manage your payment methods and transactions.", path: "/UserHomePage/Settings/PayNotifications" },
-            { title: "App Preferences", desc: "Set your theme, language, and other app preferences.", path: "/UserHomePage/Settings/Preferences" },
+            { title: "Profile Settings", desc: "Update your profile details and preferences.", path: "/user-profile/Settings/Profile" },
+            { title: "Security & Privacy", desc: "Manage your password and privacy settings.", path: "/user-profile/Settings/Security&Privacy" },
+            { title: "Notification Preferences", desc: "Customize your notification alerts.", path: "/user-profile/Settings/Notifications" },
+            { title: "Payment Settings", desc: "Manage your payment methods and transactions.", path: "/user-profile/Settings/PayNotifications" },
+            { title: "App Preferences", desc: "Set your theme, language, and other app preferences.", path: "/user-profile/Settings/Preferences" },
           ].map(({ title, desc, path }) => (
             <Link
               key={path}
@@ -50,7 +50,7 @@ export default function Settings() {
         <div className="flex flex-col items-center mt-8">
           <button
             onClick={logout}
-            className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+            className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition cursor-pointer"
           >
             Logout
           </button>

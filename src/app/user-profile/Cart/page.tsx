@@ -180,12 +180,12 @@ const CartPage = () => {
 
                     <div className="flex flex-col items-center gap-2">
                       <div className="flex items-center gap-2">
-                        <button onClick={() => item.product && handleDecrement(item.product._id)} className="bg-red-600 text-white px-2 py-1 rounded">-</button>
+                        <button onClick={() => item.product && handleDecrement(item.product._id)} className="bg-red-600 text-white px-2 py-1 rounded cursor-pointer">-</button>
                         <span className="font-bold">{item.quantity}</span>
-                        <button onClick={() => item.product && handleIncrement(item.product._id)} className="bg-green-600 text-white px-2 py-1 rounded">+</button>
+                        <button onClick={() => item.product && handleIncrement(item.product._id)} className="bg-green-600 text-white px-2 py-1 rounded cursor-pointer">+</button>
                       </div>
                       <p>Total: ${(item.product.price * item.quantity).toFixed(2)}</p>
-                      <button onClick={() => item.product && handleRemove(item.product._id)} className="bg-red-700 text-white px-3 py-1 rounded">Remove</button>
+                      <button onClick={() => item.product && handleRemove(item.product._id)} className="bg-red-700 text-white px-3 py-1 rounded cursor-pointer">Remove</button>
                     </div>
                   </>
                 )}
@@ -194,13 +194,13 @@ const CartPage = () => {
 
             <div className="text-center mt-6">
               <h2 className="text-xl font-bold mb-4">Total: ${calculateTotal()}</h2>
-              <button onClick={() => setShowModal(true)} className="bg-green-600 text-white px-6 py-2 rounded">Checkout</button>
+              <button onClick={() => setShowModal(true)} className="bg-green-600 text-white px-6 py-2 rounded cursor-pointer">Checkout</button>
             </div>
           </>
         )}
 
         <div className="text-center mt-6">
-          <a href="/user-profile" className="bg-pink-700 text-white px-4 py-2 rounded inline-block">Back</a>
+          <a href="/user-profile" className="bg-pink-700 text-white px-4 py-2 rounded inline-block cursor-pointer">Back</a>
         </div>
       </div>
 
@@ -295,17 +295,17 @@ const CartPage = () => {
             <tr key={item._id} className="border-b">
               <td>{item.product?.name}</td>
               <td className="text-center">{item.quantity}</td>
-              <td className="text-center">${item.product?.price}</td>
-              <td className="text-center">${((item.product?.price ?? 0) * item.quantity).toFixed(2)}</td>
+              <td className="text-center">₹{item.product?.price}</td>
+              <td className="text-center">₹{((item.product?.price ?? 0) * item.quantity).toFixed(2)}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
       <div className="space-y-2">
-        <p><strong>Subtotal:</strong> ${calculateTotal()}</p>
+        <p><strong>Subtotal:</strong> ₹{calculateTotal()}</p>
         <p><strong>Delivery Fee:</strong> $5.00</p>
-        <p><strong>GST (5%):</strong> ${(parseFloat(calculateTotal()) * 0.05).toFixed(2)}</p>
+        <p><strong>GST (5%):</strong> ₹{(parseFloat(calculateTotal()) * 0.05).toFixed(2)}</p>
 
         <div>
           <strong>Delivery Partner Tip:</strong>
@@ -314,7 +314,7 @@ const CartPage = () => {
               <button
                 key={amt}
                 onClick={() => handleTip(amt)}
-                className={`px-3 py-1 border rounded ${selectedTipButton === amt ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                className={`px-3 py-1 border rounded cursor-pointer ${selectedTipButton === amt ? 'bg-[#A80038] text-white' : 'bg-gray-200'}`}
               >
                 ₹{amt}
               </button>
@@ -330,7 +330,7 @@ const CartPage = () => {
         <p><strong>Total Amount:</strong> ${getTotalAmount()}</p>
 
         <div className="flex gap-3 mt-4">
-          <button onClick={handleButtonClick} className="bg-blue-500 text-white px-2  rounded">Use My Location</button>
+          <button onClick={handleButtonClick} className="bg-[#FD0054] text-white px-2  rounded cursor-pointer">Use My Location</button>
           <textarea
             value={location}
             onChange={handleLocationChange}
@@ -342,8 +342,8 @@ const CartPage = () => {
       </div>
 
       <div className="mt-6 flex justify-end gap-4">
-        <button onClick={placeorder} className="bg-green-600 text-white px-4 py-2 rounded">Place Order</button>
-        <button onClick={() => setShowModal(false)} className="bg-red-600 text-white px-4 py-2 rounded">Cancel</button>
+        <button onClick={placeorder} className="bg-green-600 text-white px-4 py-2 rounded cursor-pointer">Place Order</button>
+        <button onClick={() => setShowModal(false)} className="bg-red-600 text-white px-4 py-2 rounded cursor-pointer">Cancel</button>
       </div>
     </div>
   </div>

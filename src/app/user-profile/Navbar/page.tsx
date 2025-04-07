@@ -84,55 +84,52 @@ const Nav: React.FC<NavProps> = ({ onSearch }) => {
   return (
     <>
       <nav className="fixed top-0 left-0 w-full bg-[#A80038] shadow-md z-50">
-        <div className="px-4 py-3 flex flex-col md:flex-row gap-3">
-          {/* Top Row: Logo + Menu Icon (on mobile), inline on desktop */}
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <Link href="/user-profile">
-              <img
-                src="/images/whitelogo.png"
-                alt="Logo"
-                className="w-40 h-auto cursor-pointer"
-              />
-            </Link>
+        <div className="px-4 py-3 flex items-center justify-between gap-3">
+          {/* Logo */}
+          <Link href="/user-profile">
+            <img
+              src="/images/whitelogo.png"
+              alt="Logo"
+              className="w-40 h-auto cursor-pointer"
+            />
+          </Link>
 
-            {/* Mobile Menu Button */}
-            <button
-              className="md:hidden text-white text-2xl focus:outline-none"
-              onClick={() => setSidebarOpen(true)}
-            >
-              <HiMenu />
-            </button>
-          </div>
-
-          {/* Search bar on new line in mobile, inline in desktop */}
-          <div className="w-full md:flex md:items-center md:justify-between">
+          {/* Search Bar */}
+          <div className="flex-1 flex justify-center">
             <input
               type="text"
               placeholder="Search products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyPress}
-              className="w-full md:w-64 mt-2 md:mt-0 px-4 py-2 rounded-md text-sm focus:outline-none shadow-md bg-white"
+              className="md:w-96 px-4 py-2 rounded-md text-sm focus:outline-none shadow-md bg-white"
             />
-
-            {/* Desktop Nav Links */}
-            <div className="hidden md:flex items-center gap-6 text-white text-lg font-semibold ml-4">
-              <Link href="/user-profile/Orders" className="hover:text-pink-200">
-                Orders
-              </Link>
-              <Link href="/user-profile/Settings" className="hover:text-pink-200">
-                Settings
-              </Link>
-              <Link href="/user-profile/Cart" className="hover:text-pink-200">
-                <FontAwesomeIcon icon={faCartShopping} className="text-xl" />
-              </Link>
-            </div>
           </div>
+
+          {/* Navigation Links */}
+          <div className="hidden md:flex items-center gap-6 text-white text-lg font-semibold">
+            <Link href="/user-profile/Orders" className="hover:text-pink-200">
+              Orders
+            </Link>
+            <Link href="/user-profile/Settings" className="hover:text-pink-200">
+              Settings
+            </Link>
+            <Link href="/user-profile/Cart" className="hover:text-pink-200">
+              <FontAwesomeIcon icon={faCartShopping} className="text-xl" />
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-white text-2xl focus:outline-none"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <HiMenu />
+          </button>
         </div>
       </nav>
 
-      {/* Sidebar for mobile */}
+      {/* Sidebar for Mobile */}
       <div
         className={`fixed top-0 right-0 h-full w-64 bg-[#A80038] text-white shadow-lg transform transition-transform duration-300 z-50 ${
           sidebarOpen ? "translate-x-0" : "translate-x-full"

@@ -13,7 +13,7 @@ interface Order {
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -23,8 +23,6 @@ const OrdersPage = () => {
         setOrders(response.data.orders);
       } catch (error) {
         console.error('Error fetching orders:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -33,15 +31,13 @@ const OrdersPage = () => {
 
   return (
  <>
-      <div className="w-full flex justify-center items-center h-16 bg-[#FBF9FA] text-[#2B2024]">
+      {/* <div className="w-full flex justify-center items-center h-16 bg-[#FBF9FA] text-[#2B2024]">
         <h1 className="text-2xl font-bold lg:text-3xl">Orders</h1>
-      </div>
+      </div> */}
       <div className="main-content p-5 bg-gray-100 min-h-screen mt-9">
         <h1 className="text-2xl font-bold mb-6 text-center lg:text-3xl">Orders</h1>
 
-        {loading ? (
-          <p className="text-center text-gray-500">Loading orders...</p>
-        ) : orders.length === 0 ? (
+        {orders.length === 0 ? (
           <p className="text-center text-gray-500">No orders found.</p>
         ) : (
           <div className="orders-list space-y-4">
